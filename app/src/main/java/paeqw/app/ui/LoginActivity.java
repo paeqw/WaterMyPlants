@@ -20,10 +20,9 @@ import com.google.firebase.appcheck.playintegrity.PlayIntegrityAppCheckProviderF
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import paeqw.app.R;
+import paeqw.app.ui.helpers.DatabaseHelper;
 
 public class LoginActivity extends AppCompatActivity {
 

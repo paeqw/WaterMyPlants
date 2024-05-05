@@ -1,4 +1,4 @@
-package paeqw.app.ui;
+package paeqw.app.ui.models;
 
 import java.time.LocalDateTime;
 
