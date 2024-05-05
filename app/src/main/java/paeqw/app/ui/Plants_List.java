@@ -1,8 +1,10 @@
-package paeqw.app;
+package paeqw.app.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import paeqw.app.R;
 
 public class Plants_List extends AppCompatActivity {
 
