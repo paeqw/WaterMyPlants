@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "210973644212",
+    "project_id": "wateryourplants-8524a",
+    "storage_bucket": "wateryourplants-8524a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:210973644212:android:c01364061a8459877acee1",
+        "android_client_info": {
+          "package_name": "paeqw.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyACanzxAq_XOVUhSPMYSSN4iml8FWKUNPo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
