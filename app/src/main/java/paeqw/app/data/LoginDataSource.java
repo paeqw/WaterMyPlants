@@ -6,9 +6,11 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 import paeqw.app.R;
 import paeqw.app.data.model.FailedToLoginException;
@@ -24,7 +26,7 @@ public class LoginDataSource {
         final ResultWrapper<LoggedInUser> resultWrapper = new ResultWrapper<>();
 
         FirebaseAuth.getInstance().signInWithEmailAndPassword(username, password)
-                .addOnCompleteListener((Executor) this, new OnCompleteListener<AuthResult>() {
+                .addOnCompleteListener(Executors.newSingleThreadExecutor(), new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
@@ -34,14 +36,40 @@ public class LoginDataSource {
                             resultWrapper.setResult(new Result.Success<>(loggedInUser));
                         } else {
                             // Sign in failed
-                            resultWrapper.setResult(new Result.Error(task.getException()));
+                            if (task.getException() instanceof FirebaseAuthInvalidUserException) {
+                                // User does not exist, proceed with registration
+                                register(username, password, resultWrapper);
+                            } else {
+                                // Other sign in errors
+                                resultWrapper.setResult(new Result.Error(task.getException()));
+                            }
                         }
                     }
                 });
 
         return new Result.Error(new FailedToLoginException("Login failed"));
     }
-// TODO: idk if logout works
+
+    private void register(String username, String password, ResultWrapper<LoggedInUser> resultWrapper) {
+        FirebaseAuth.getInstance().createUserWithEmailAndPassword(username, password)
+                .addOnCompleteListener(Executors.newSingleThreadExecutor(), new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // User registered and signed in successfully
+                            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                            LoggedInUser loggedInUser = new LoggedInUser(user.getUid(), user.getDisplayName());
+                            resultWrapper.setResult(new Result.Success<>(loggedInUser));
+                        } else {
+                            // Registration failed
+                            resultWrapper.setResult(new Result.Error(task.getException()));
+                        }
+                    }
+                });
+    }
+
+
+    // TODO: idk if logout works
     public void logout() {
         FirebaseAuth.getInstance().signOut();
     }
