@@ -1,8 +1,8 @@
 <resources>
-<!--main-->
+    <!--main-->
     <string name="app_name">Water my plants</string>
 
-<!--settings-->
+    <!--settings-->
 
     <string name="title_activity_settings">SettingsActivity</string>
 
@@ -22,7 +22,7 @@
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
 
 
-<!--login-->
+    <!--login-->
     <string name="emailtext">Email</string>
     <string name="emailhint">Enter your email</string>
     <string name="passwordtext">Password</string>
@@ -32,6 +32,11 @@
     <string name="registertext">Register</string>
     <string name="button_login_with_google">Login with Google</string>
     <string name="button_login_with_facebook">Login with Facebook</string>
-
+    <string name="enter_your_password">Enter your password</string>
+    <string name="hint_repeat_your_password">Repeat your password</string>
+    <string name="repeat_password_text">Repeat Password</string>
+    <string name="hint_enter_your_password">Enter your password</string>
+    <string name="hint_enter_your_username">Enter your username</string>
+    <string name="username_text">Username</string>
 
 </resources>

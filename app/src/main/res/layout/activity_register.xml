@@ -1,8 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    tools:context=".ui.RegisterActivity"
     android:padding="16dp">
+
+    <TextView
+        android:id="@+id/textViewUsernameLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/username_text"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_marginTop="16dp"/>
+
+    <EditText
+        android:id="@+id/editTextUsername"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:autofillHints="username"
+        android:layout_below="@id/textViewUsernameLabel"
+        android:layout_marginTop="8dp"
+        android:hint="@string/hint_enter_your_username"
+        android:inputType="text"/>
 
     <TextView
         android:id="@+id/textViewEmailLabel"
@@ -10,6 +30,7 @@
         android:layout_height="wrap_content"
         android:text="@string/emailtext"
         android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_below="@id/editTextUsername"
         android:layout_marginTop="16dp"/>
 
     <EditText
@@ -37,32 +58,35 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/textViewPasswordLabel"
         android:layout_marginTop="8dp"
+        android:hint="@string/hint_enter_your_password"
         android:autofillHints="password"
-        android:hint="@string/enter_your_password"
         android:inputType="textPassword"/>
 
-    <Button
-        android:id="@+id/buttonLogin"
+    <TextView
+        android:id="@+id/textViewRepeatPasswordLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/repeat_password_text"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_below="@id/editTextPassword"
+        android:autofillHints="password"
+        android:layout_marginTop="16dp"/>
+
+    <EditText
+        android:id="@+id/editTextRepeatPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/editTextPassword"
-        android:layout_marginTop="16dp"
-        android:text="@string/button_login"/>
+        android:layout_below="@id/textViewRepeatPasswordLabel"
+        android:layout_marginTop="8dp"
+        android:hint="@string/hint_repeat_your_password"
+        android:inputType="textPassword"/>
 
     <Button
         android:id="@+id/buttonRegister"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/buttonLogin"
-        android:layout_marginTop="8dp"
+        android:layout_below="@id/editTextRepeatPassword"
+        android:layout_marginTop="16dp"
         android:text="@string/button_register"/>
-
-    <Button
-        android:id="@+id/buttonLoginGoogle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/buttonRegister"
-        android:layout_marginTop="8dp"
-        android:text="@string/button_login_with_google"/>
 
 </RelativeLayout>
