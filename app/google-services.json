@@ -12,7 +12,20 @@
           "package_name": "paeqw.app"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "210973644212-fo31m6ef09frap4k02nvslchlds10se2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "paeqw.app",
+            "certificate_hash": "9d1683495897756ac93417550403e8f156fc601b"
+          }
+        },
+        {
+          "client_id": "210973644212-5jr5neimt247egm39m5lqovm0d5heuv8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyACanzxAq_XOVUhSPMYSSN4iml8FWKUNPo"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "210973644212-5jr5neimt247egm39m5lqovm0d5heuv8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }
