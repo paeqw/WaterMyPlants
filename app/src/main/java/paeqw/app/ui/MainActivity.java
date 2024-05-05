@@ -7,6 +7,8 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import paeqw.app.R;
 
 public class MainActivity extends AppCompatActivity {
@@ -18,13 +20,13 @@ public class MainActivity extends AppCompatActivity {
 
         button = findViewById(R.id.btn);
 
-
-
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(MainActivity.this, LoginActivity.class));
                 finish();
+                FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+                firebaseAuth.signOut();
             }
         });
     }
