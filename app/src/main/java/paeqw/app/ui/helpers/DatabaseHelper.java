@@ -1,4 +1,4 @@
-package paeqw.app.ui;
+package paeqw.app.ui.helpers;
 
 import android.util.Log;
 import android.widget.Toast;
