@@ -124,6 +124,6 @@ public class LoginActivity extends AppCompatActivity {
         startActivity(intent);
         finish();
         DatabaseHelper databaseHelper = new DatabaseHelper();
-        databaseHelper.writeUserIdToDatabase("11");
+        databaseHelper.addUserToDatabase();
     }
 }
