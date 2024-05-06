@@ -1,26 +1,22 @@
-package paeqw.app.ui.models;
+package paeqw.app.models;
 
 import java.time.LocalDateTime;
 
 public class Plant {
     private String name;
-    private String localisation;
     private LocalDateTime whenLastWatered;
     //todo: image
-
-    public Plant(String name, String localisation) {
+    public Plant(String name) {
         this.name = name;
-        this.localisation = localisation;
+    }
+    public Plant(String name, LocalDateTime whenLastWatered) {
+        this.name = name;
+        this.whenLastWatered = whenLastWatered;
     }
 
     public String getName() {
         return name;
     }
-
-    public String getLocalisation() {
-        return localisation;
-    }
-
     public LocalDateTime getWhenLastWatered() {
         return whenLastWatered;
     }
