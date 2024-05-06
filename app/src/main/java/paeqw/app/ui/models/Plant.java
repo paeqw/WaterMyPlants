@@ -6,6 +6,7 @@ public class Plant {
     private String name;
     private String localisation;
     private LocalDateTime whenLastWatered;
+    //todo: image
 
     public Plant(String name, String localisation) {
         this.name = name;
