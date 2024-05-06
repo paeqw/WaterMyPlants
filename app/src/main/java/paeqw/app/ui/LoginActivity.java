@@ -22,7 +22,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
 
 import paeqw.app.R;
-import paeqw.app.ui.helpers.DatabaseHelper;
+import paeqw.app.helpers.DatabaseHelper;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -120,7 +120,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void navigateToMainActivity() {
-        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+        Intent intent = new Intent(LoginActivity.this, StartActivity.class);
         startActivity(intent);
         finish();
         DatabaseHelper databaseHelper = new DatabaseHelper();
