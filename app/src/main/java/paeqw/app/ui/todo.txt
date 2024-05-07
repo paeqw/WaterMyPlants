@@ -1,10 +1,10 @@
-IMAGE IDENTYFICATION:
-    coordinates to identyfication
+IMAGE IDENTIFICATION:
+    coordinates to identification - idk if i wanna do this
 PLANT SEARCH
 SETTINGS PAGE
 PLANTS "SPACES" - where plant is located
-ADDINGS PLANTS & PLACES
+ADDING PLANTS & PLACES
 blog??
 api docs
     (Plant List api) - https://perenual.com/docs/api
-    (Plant identyfication api) - https://documenter.getpostman.com/view/24599534/2s93z5A4v2#intro
+    (Plant identification api) - https://documenter.getpostman.com/view/24599534/2s93z5A4v2#intro
