@@ -39,6 +39,10 @@ public class LoginActivity extends AppCompatActivity {
 
         firebaseAuth = FirebaseAuth.getInstance();
 
+        if (firebaseAuth.getCurrentUser() != null) {
+            navigateToMainActivity();
+        }
+
         FirebaseApp.initializeApp(this);
         FirebaseAppCheck firebaseAppCheck = FirebaseAppCheck.getInstance();
         firebaseAppCheck.installAppCheckProviderFactory(PlayIntegrityAppCheckProviderFactory.getInstance());
@@ -62,11 +66,18 @@ public class LoginActivity extends AppCompatActivity {
         buttonLoginGoogle = findViewById(R.id.buttonLoginGoogle);
     }
 
+    private void handleGoogleSignIn() {
+        mGoogleSignInClient.signOut().addOnCompleteListener(this, task -> {
+            startActivityForResult(mGoogleSignInClient.getSignInIntent(), RC_SIGN_IN);
+        });
+    }
+
     private void initListeners() {
         buttonLogin.setOnClickListener(v -> signInWithEmailPassword());
         buttonRegister.setOnClickListener(v -> startActivity(new Intent(LoginActivity.this, RegisterActivity.class)));
-        buttonLoginGoogle.setOnClickListener(v -> startActivityForResult(mGoogleSignInClient.getSignInIntent(), RC_SIGN_IN));
+        buttonLoginGoogle.setOnClickListener(v -> handleGoogleSignIn());
     }
+
 
     private void signInWithEmailPassword() {
         String email = editTextEmail.getText().toString().trim();
@@ -120,7 +131,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void navigateToMainActivity() {
-        Intent intent = new Intent(LoginActivity.this, StartActivity.class);
+        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
         startActivity(intent);
         finish();
         DatabaseHelper databaseHelper = new DatabaseHelper();

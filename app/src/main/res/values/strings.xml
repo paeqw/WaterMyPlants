@@ -39,5 +39,10 @@
     <string name="hint_enter_your_username">Enter your username</string>
     <string name="username_text">Username</string>
     <string name="default_web_client_id">210973644212-5jr5neimt247egm39m5lqovm0d5heuv8.apps.googleusercontent.com</string>
+    <string name="menu_icon_my_plants">My plants</string>
+    <string name="menu_icon_search">Search</string>
+    <string name="menu_icon_blog">Blog</string>
+    <string name="menu_icon_more">More</string>
+    <string name="menu_icon_scan">Scan</string>
 
 </resources>

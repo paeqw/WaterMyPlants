@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/nav_item1"
+        android:icon="@drawable/potted_plant_24px"
+        android:title="@string/menu_icon_my_plants"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/nav_item2"
+        android:icon="@drawable/search_24px"
+        android:title="@string/menu_icon_search"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/nav_item3"
+        android:icon="@drawable/photo_camera_24px"
+        android:title="@string/menu_icon_scan"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/nav_item4"
+        android:icon="@drawable/article_24px"
+        android:title="@string/menu_icon_blog"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/nav_item5"
+        android:icon="@drawable/tooltip_24px"
+        android:title="@string/menu_icon_more"
+        app:showAsAction="ifRoom" />
+</menu>
