@@ -11,11 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/bottom_navigation">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="main"/>
+        <include android:id="@+id/includedLayout" layout="@layout/activity_plant_list" />
     </FrameLayout>
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
@@ -23,14 +19,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:background="#0D0D15"
         app:itemIconTint="@drawable/bottom_nav_item_color"
         app:itemTextColor="@drawable/bottom_nav_item_color"
         app:menu="@menu/bottom_nav_menu"
         app:itemRippleColor="#04BF9460"
         app:labelVisibilityMode="labeled"
         android:padding="8dp"
-        app:itemBackground="@drawable/bottom_nav_background"
+        android:background="@drawable/bottom_nav_background"
         app:elevation="16dp"/>
 
 </RelativeLayout>

@@ -1,21 +1,23 @@
 package paeqw.app.ui;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
+import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 import paeqw.app.R;
 import paeqw.app.ui.MainActivity;
 
-public class SearchPlantActivity extends AppCompatActivity {
+public class PlantListActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search_plant);
+        setContentView(R.layout.activity_plant_list);
 
     }
     @Override
