@@ -1,4 +1,4 @@
-package paeqw.app.ui;
+package paeqw.app.activities;
 
 import android.os.Bundle;
 
