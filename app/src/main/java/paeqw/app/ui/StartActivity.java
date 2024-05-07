@@ -25,8 +25,7 @@ public class StartActivity extends AppCompatActivity {
             public void onClick(View view) {
                 startActivity(new Intent(StartActivity.this, LoginActivity.class));
                 finish();
-                FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-                firebaseAuth.signOut();
+
             }
         });
     }

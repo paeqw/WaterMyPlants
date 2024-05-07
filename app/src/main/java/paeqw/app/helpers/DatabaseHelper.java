@@ -30,22 +30,24 @@ public class DatabaseHelper {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     if (!dataSnapshot.exists()) {
-                        databaseRef.setValue(userId)
+                        databaseRef.child(userId).setValue(userId)
                                 .addOnSuccessListener(aVoid -> {
-
+                                    Log.d("WaterYourPlants", "User added successfully.");
                                 })
                                 .addOnFailureListener(e -> {
-                                    Log.e("WaterYourPlants", e.getMessage() == null ? "what" : e.getMessage());
+                                    Log.e("WaterYourPlants", e.getMessage() == null ? "Unknown error occurred" : e.getMessage());
                                 });
                     }
                 }
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
-
+                    // Handle possible cancellations
+                    Log.e("WaterYourPlants", "Database operation was cancelled.");
                 }
             });
         }
     }
+
 
 }
