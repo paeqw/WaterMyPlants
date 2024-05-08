@@ -5,10 +5,10 @@
     android:layout_height="match_parent"
     tools:context=".fragments.MoreFragment">
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="logout"
+        android:text="@string/logout"
         android:layout_centerInParent="true"
         android:id="@+id/button"
         />

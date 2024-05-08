@@ -38,4 +38,7 @@ public class Space {
         return plantList;
     }
 
+    public String getSpaceName() {
+        return spaceName;
+    }
 }

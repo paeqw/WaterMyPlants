@@ -5,23 +5,36 @@ import java.time.LocalDateTime;
 public class Plant {
     private String name;
     private LocalDateTime whenLastWatered;
-    //todo: image
-    public Plant(String name) {
+    private String imageUrl; // URL to the image of the plant
+
+    public Plant(String name, String imageUrl) {
         this.name = name;
+        this.imageUrl = imageUrl;
     }
-    public Plant(String name, LocalDateTime whenLastWatered) {
+
+    public Plant(String name, LocalDateTime whenLastWatered, String imageUrl) {
         this.name = name;
         this.whenLastWatered = whenLastWatered;
+        this.imageUrl = imageUrl;
     }
 
     public String getName() {
         return name;
     }
+
     public LocalDateTime getWhenLastWatered() {
         return whenLastWatered;
     }
 
     public void setWhenLastWatered(LocalDateTime whenLastWatered) {
         this.whenLastWatered = whenLastWatered;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }
