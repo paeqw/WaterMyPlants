@@ -9,6 +9,9 @@ public class Space {
     private String spaceName;
     private List<Plant> plantList;
 
+    public Space() {
+    }
+
     public Space(String spaceName) {
         this.spaceName = spaceName;
         this.plantList = new ArrayList<>();

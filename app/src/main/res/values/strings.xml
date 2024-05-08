@@ -48,5 +48,8 @@
     <string name="menu_icon_scan">Scan</string>
     <string name="spaces">Spaces</string>
     <string name="logout">logout</string>
+    <string name="add_space_button">Add space</string>
+    <string name="enter_space_name">Enter space name</string>
+    <string name="space_name">Space name</string>
 
 </resources>

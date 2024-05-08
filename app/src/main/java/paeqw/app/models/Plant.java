@@ -5,7 +5,14 @@ import java.time.LocalDateTime;
 public class Plant {
     private String name;
     private LocalDateTime whenLastWatered;
-    private String imageUrl; // URL to the image of the plant
+    private String imageUrl;
+
+    public Plant() {
+    }
+
+    public Plant(String name) {
+        this.name = name;
+    }
 
     public Plant(String name, String imageUrl) {
         this.name = name;
