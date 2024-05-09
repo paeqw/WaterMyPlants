@@ -45,7 +45,8 @@ dependencies {
     implementation("com.google.firebase:firebase-database:21.0.0")
     implementation("com.google.android.material:material:1.12.0")
     implementation("com.google.code.gson:gson:2.10.1")
-
+    implementation("com.github.bumptech.glide:glide:4.12.0")
+    annotationProcessor("com.github.bumptech.glide:compiler:4.12.0")
 
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.12.0")

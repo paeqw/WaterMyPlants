@@ -1,11 +1,13 @@
 package paeqw.app.collections;
 
 import android.content.Context;
+import android.os.Parcelable;
 import android.util.Log;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;

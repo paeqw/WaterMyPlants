@@ -3,6 +3,7 @@ package paeqw.app.fragments;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
@@ -23,10 +24,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.gson.Gson;
 
 import java.util.concurrent.TimeUnit;
 
 import paeqw.app.R;
+import paeqw.app.activities.SpaceDetailActivity;
 import paeqw.app.collections.SpaceManager;
 import paeqw.app.exceptions.CouldNotFindException;
 import paeqw.app.models.Space;
@@ -65,33 +68,33 @@ public class PlantsListFragment extends Fragment {
 
         return rootView;
     }
-    public void showViews() {
+    private void showViews() {
         linearLayout.removeAllViews();
         for (Space el : spaceManager.getSpaceList()) {
             linearLayout.addView(generateSpaceView(getActivity(),el));
         }
     }
-    public void showViews(String name) {
+    private void showViews(String name) {
         linearLayout.removeAllViews();
         try {
             for (Space el : spaceManager.searchSpace(name)) {
                 linearLayout.addView(generateSpaceView(getActivity(),el));
             }
         } catch (CouldNotFindException e) {
-            //to do
+            //to do or not idk
         }
     }
 
-    public void saveViews(){
+    private void saveViews(){
         spaceManager.saveToSharedPreferences();
     }
-    public void initViews(View rootView){
+    private void initViews(View rootView){
         linearLayout = rootView.findViewById(R.id.linear);
         addSpaceButton = rootView.findViewById(R.id.addSpaceButton);
         searchField = rootView.findViewById(R.id.searchField);
     }
 
-    public void initListeners(){
+    private void initListeners(){
         addSpaceButton.setOnClickListener(v -> addSpaceButtonClicked());
         searchField.addTextChangedListener(new TextWatcher() {
             @Override
@@ -110,7 +113,7 @@ public class PlantsListFragment extends Fragment {
             }
         });
     }
-    public void addSpaceButtonClicked() {
+    private void addSpaceButtonClicked() {
         Dialog dialog = new Dialog(getActivity());
         dialog.setContentView(R.layout.add_space_dialog);
 
@@ -133,7 +136,7 @@ public class PlantsListFragment extends Fragment {
 
         dialog.show();
     }
-    public View generateSpaceView(Context context, Space space) {
+    private View generateSpaceView(Context context, Space space) {
         LayoutInflater inflater = LayoutInflater.from(context);
         FrameLayout frameLayout = (FrameLayout) inflater.inflate(R.layout.space_view_template, null);
 
@@ -143,7 +146,22 @@ public class PlantsListFragment extends Fragment {
         TextView plantCountTextView = frameLayout.findViewById(R.id.plant_count);
         plantCountTextView.setText("Plants: " + space.getPlantList().size());
 
+        frameLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, SpaceDetailActivity.class);
+                intent.putExtra("spaceName", space.getSpaceName());
+
+                Gson gson = new Gson();
+                String json = gson.toJson(spaceManager);
+                intent.putExtra("spaceManager", json);
+
+                context.startActivity(intent);
+            }
+        });
+
         Button moreButton = frameLayout.findViewById(R.id.more_button);
+
         moreButton.setOnClickListener(view -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(context);
             LayoutInflater inflaterForDialog = LayoutInflater.from(context);
@@ -153,8 +171,6 @@ public class PlantsListFragment extends Fragment {
             textView.setText("Modifying space: '" + space.getSpaceName() + "'");
             Button buttonModify = dialogView.findViewById(R.id.buttonModify);
             Button buttonDelete = dialogView.findViewById(R.id.buttonDelete);
-
-
 
             builder.setView(dialogView);
             AlertDialog dialog = builder.create();
