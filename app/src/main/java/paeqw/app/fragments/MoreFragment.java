@@ -10,8 +10,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import paeqw.app.R;
 import paeqw.app.activities.LoginActivity;
@@ -22,6 +27,8 @@ public class MoreFragment extends Fragment {
 
     }
     Button button;
+    TextView textView;
+    ImageView profileImage;
     public static MoreFragment newInstance() {
         MoreFragment fragment = new MoreFragment();
         Bundle args = new Bundle();
@@ -36,12 +43,15 @@ public class MoreFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
         View rootView = inflater.inflate(R.layout.fragment_more, container, false);
-        button = rootView.findViewById(R.id.button);
+        initViews(rootView);
+        Glide.with(rootView).load(firebaseUser.getPhotoUrl()).apply(RequestOptions.circleCropTransform()).into(profileImage);
+        textView.setText(firebaseUser.getDisplayName());
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
                 firebaseAuth.signOut();
                 SharedPreferencesHelper sharedPreferencesHelper = new SharedPreferencesHelper(getContext());
                 sharedPreferencesHelper.clearSpaces();
@@ -49,5 +59,10 @@ public class MoreFragment extends Fragment {
             }
         });
         return rootView;
+    }
+    private void initViews(View rootView) {
+        button = rootView.findViewById(R.id.button);
+        textView = rootView.findViewById(R.id.textViewUsernameLabel);
+        profileImage = rootView.findViewById(R.id.rounded_image_view);
     }
 }

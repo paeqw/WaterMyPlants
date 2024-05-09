@@ -55,5 +55,7 @@
     <string name="delete_space_button">Delete space</string>
     <string name="modify_space_name_text">Modify space name</string>
     <string name="change_name_button">Change name</string>
+    <string name="more">More</string>
+    <string name="profile_image_description">profile image</string>
 
 </resources>
