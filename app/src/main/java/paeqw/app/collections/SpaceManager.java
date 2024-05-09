@@ -36,29 +36,36 @@ public class SpaceManager {
         sharedPreferencesHelper.saveSpaces(spaceList);
     }
 
-    public void loadFromSharedPreferences() {
-        SharedPreferencesHelper sharedPreferencesHelper = new SharedPreferencesHelper(context);
-        List<Space> fromSharedPreferences = sharedPreferencesHelper.getSpaces();
-        for (Space el:fromSharedPreferences) {
-            addSpace(el);
-        }
+    public CompletableFuture<Void> loadFromSharedPreferences() {
+        return CompletableFuture.runAsync(() -> {
+            SharedPreferencesHelper sharedPreferencesHelper = new SharedPreferencesHelper(context);
+            List<Space> fromSharedPreferences = sharedPreferencesHelper.getSpaces();
+            for (Space el : fromSharedPreferences) {
+                addSpace(el);
+            }
+        });
     }
-    public void loadFromDatabase() {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user != null) {
-            String userId = user.getUid();
-            CompletableFuture<List<Space>> spacesFuture = databaseHelper.fetchSpaces(userId);
-            spacesFuture.thenAccept(spaces -> {
-                for (Space el: spaces) {
-                    addSpace(el);
-                }
-                saveToSharedPreferences();
-            }).exceptionally(ex -> {
-                Log.e("Database", "Error fetching spaces", ex);
-                return null;
-            });
-        }
+
+    public CompletableFuture<Void> loadFromDatabase() {
+        return CompletableFuture.supplyAsync(() -> {
+                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                    if (user == null) {
+                        throw new IllegalStateException("User not logged in");
+                    }
+                    return user.getUid();
+                }).thenCompose(userId -> databaseHelper.fetchSpaces(userId))
+                .thenAccept(spaces -> {
+                    for (Space el : spaces) {
+                        addSpace(el);
+                    }
+                    saveToSharedPreferences();
+                })
+                .exceptionally(ex -> {
+                    Log.e("Database", "Error fetching spaces", ex);
+                    return null;
+                });
     }
+
 
     public void addSpace(Space space) {
         for (Space el: spaceList) {

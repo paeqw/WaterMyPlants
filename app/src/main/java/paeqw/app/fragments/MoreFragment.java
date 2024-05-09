@@ -15,6 +15,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import paeqw.app.R;
 import paeqw.app.activities.LoginActivity;
+import paeqw.app.helpers.SharedPreferencesHelper;
 
 public class MoreFragment extends Fragment {
     public MoreFragment() {
@@ -42,7 +43,8 @@ public class MoreFragment extends Fragment {
             public void onClick(View view) {
                 FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
                 firebaseAuth.signOut();
-                Log.d("WWWW", "DZIALA");
+                SharedPreferencesHelper sharedPreferencesHelper = new SharedPreferencesHelper(getContext());
+                sharedPreferencesHelper.clearSpaces();
                 startActivity(new Intent(getActivity(), LoginActivity.class));
             }
         });

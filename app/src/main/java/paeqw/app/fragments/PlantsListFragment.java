@@ -1,11 +1,15 @@
 package paeqw.app.fragments;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +20,11 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.material.textfield.TextInputEditText;
+
+import java.util.concurrent.TimeUnit;
 
 import paeqw.app.R;
 import paeqw.app.collections.SpaceManager;
@@ -26,6 +35,7 @@ public class PlantsListFragment extends Fragment {
     LinearLayout linearLayout;
     SpaceManager spaceManager;
     Button addSpaceButton;
+    EditText searchField;
     public PlantsListFragment() {
 
     }
@@ -48,8 +58,10 @@ public class PlantsListFragment extends Fragment {
         initViews(rootView);
         initListeners();
         spaceManager = new SpaceManager(getActivity());
-        loadViews();
-        showViews();
+        spaceManager.loadFromDatabase().thenRun(() -> {
+            spaceManager.loadFromSharedPreferences();
+            showViews();
+        });
 
         return rootView;
     }
@@ -59,19 +71,44 @@ public class PlantsListFragment extends Fragment {
             linearLayout.addView(generateSpaceView(getActivity(),el));
         }
     }
-    public void loadViews(){
-        spaceManager.loadFromSharedPreferences();
+    public void showViews(String name) {
+        linearLayout.removeAllViews();
+        try {
+            for (Space el : spaceManager.searchSpace(name)) {
+                linearLayout.addView(generateSpaceView(getActivity(),el));
+            }
+        } catch (CouldNotFindException e) {
+            //to do
+        }
     }
+
     public void saveViews(){
         spaceManager.saveToSharedPreferences();
     }
     public void initViews(View rootView){
         linearLayout = rootView.findViewById(R.id.linear);
         addSpaceButton = rootView.findViewById(R.id.addSpaceButton);
+        searchField = rootView.findViewById(R.id.searchField);
     }
 
     public void initListeners(){
         addSpaceButton.setOnClickListener(v -> addSpaceButtonClicked());
+        searchField.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                showViews(searchField.getText().toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
     }
     public void addSpaceButtonClicked() {
         Dialog dialog = new Dialog(getActivity());
@@ -108,15 +145,81 @@ public class PlantsListFragment extends Fragment {
 
         Button moreButton = frameLayout.findViewById(R.id.more_button);
         moreButton.setOnClickListener(view -> {
-            try {
-                spaceManager.removeSpace(space);
-                saveViews();
-                showViews();
-            } catch (CouldNotFindException e) {
-                Log.e("Water your plants", "What", e);
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            LayoutInflater inflaterForDialog = LayoutInflater.from(context);
+            View dialogView = inflaterForDialog.inflate(R.layout.modify_space_dialog, null);
+
+            TextView textView = dialogView.findViewById(R.id.text);
+            textView.setText("Modifying space: '" + space.getSpaceName() + "'");
+            Button buttonModify = dialogView.findViewById(R.id.buttonModify);
+            Button buttonDelete = dialogView.findViewById(R.id.buttonDelete);
+
+
+
+            builder.setView(dialogView);
+            AlertDialog dialog = builder.create();
+
+            buttonModify.setOnClickListener(v -> {
+                AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
+                LayoutInflater inflaterForDialog1 = LayoutInflater.from(context);
+                View dialogView1 = inflaterForDialog1.inflate(R.layout.modify_space_name_dialog, null);  // use the layout you provided
+
+                TextInputEditText editText1 = dialogView1.findViewById(R.id.editTextCustom);
+                editText1.setText(space.getSpaceName());  // pre-fill the current name
+
+                builder1.setView(dialogView1);
+                AlertDialog dialog1 = builder1.create();
+
+                Window window = dialog1.getWindow();
+                if (window != null) {
+                    window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                    window.setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                }
+
+                Button submitButton = dialogView1.findViewById(R.id.buttonSubmit);
+                submitButton.setOnClickListener(va -> {
+                    String newName = editText1.getText().toString();
+                    if (!newName.isEmpty()) {
+                        Space space1 = new Space(newName);
+                        space1.setPlantList(space.getPlantList());
+                        try {
+                            spaceManager.removeSpace(space);
+                        } catch (CouldNotFindException e) {
+                        }
+                        spaceManager.addSpace(space1);
+                        nameTextView.setText(newName);
+                        showViews();
+                        saveViews();
+                        dialog.dismiss();
+                        dialog1.dismiss();
+
+                    } else {
+                        editText1.setError("Name cannot be empty");
+                    }
+                });
+                dialog1.show();
+            });
+            buttonDelete.setOnClickListener(v -> {
+                try {
+                    spaceManager.removeSpace(space);
+                    saveViews();
+                    showViews();
+                } catch (CouldNotFindException e) {
+                    Log.e("Water your plants", "Error deleting space", e);
+                }
+                dialog.dismiss();
+            });
+
+            dialog.show();
+
+            Window window = dialog.getWindow();
+            if (window != null) {
+                window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                window.setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
             }
         });
 
         return frameLayout;
     }
+
 }
