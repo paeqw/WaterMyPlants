@@ -24,6 +24,10 @@ public class SharedPreferencesHelper {
         String json = gson.toJson(spaces);
         sharedPreferences.edit().putString("spaces", json).apply();
     }
+    public void clearSpaces() {
+        String json = gson.toJson(new ArrayList<>());
+        sharedPreferences.edit().putString("spaces", json).apply();
+    }
 
     public List<Space> getSpaces() {
         String json = sharedPreferences.getString("spaces", null);

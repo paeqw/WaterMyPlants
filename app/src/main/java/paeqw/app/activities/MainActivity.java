@@ -24,7 +24,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
-        bottomNavigationView.setSelectedItemId(R.id.nav_item1);
         bottomNavigationView.setOnItemSelectedListener(item -> {
             int itemId = item.getItemId();
             if (itemId == R.id.nav_item1) {
@@ -41,7 +40,6 @@ public class MainActivity extends AppCompatActivity {
             return true;
         });
 
-        // Ensure the first fragment is loaded correctly
         if (savedInstanceState == null) {
             replaceFragment(new PlantsListFragment());
         }

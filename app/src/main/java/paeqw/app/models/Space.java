@@ -10,6 +10,7 @@ public class Space {
     private List<Plant> plantList;
 
     public Space() {
+        this.plantList = new ArrayList<>();
     }
 
     public Space(String spaceName) {
@@ -19,6 +20,14 @@ public class Space {
 
     public void addPlant(Plant plant) {
         plantList.add(plant);
+    }
+
+    public void setSpaceName(String spaceName) {
+        this.spaceName = spaceName;
+    }
+
+    public void setPlantList(List<Plant> plantList) {
+        this.plantList = plantList;
     }
 
     public void removePlant(Plant plant) throws CouldNotFindException {

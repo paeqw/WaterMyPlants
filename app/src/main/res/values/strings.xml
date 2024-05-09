@@ -51,5 +51,9 @@
     <string name="add_space_button">Add space</string>
     <string name="enter_space_name">Enter space name</string>
     <string name="space_name">Space name</string>
+    <string name="modify_space_name_button">Modify space name</string>
+    <string name="delete_space_button">Delete space</string>
+    <string name="modify_space_name_text">Modify space name</string>
+    <string name="change_name_button">Change name</string>
 
 </resources>
