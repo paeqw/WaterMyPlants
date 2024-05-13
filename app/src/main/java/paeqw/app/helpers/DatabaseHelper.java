@@ -37,7 +37,6 @@ public class DatabaseHelper {
         plantRef.setValue(plant);
     }
 
-    // Uploads a plant image and returns the URI
     public CompletableFuture<Uri> uploadPlantImage(Uri fileUri, String userId, String spaceName, String plantName) {
         StorageReference fileRef = storage.getReference().child("images").child(userId).child(spaceName).child(plantName);
         CompletableFuture<Uri> future = new CompletableFuture<>();
@@ -104,7 +103,6 @@ public class DatabaseHelper {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
-                    // Map each child to a Space object
                     List<Space> spaces = new ArrayList<>();
                     for (DataSnapshot spaceSnapshot : dataSnapshot.getChildren()) {
                         Space space = spaceSnapshot.getValue(Space.class);
@@ -127,35 +125,27 @@ public class DatabaseHelper {
 
         return future;
     }
-
-
-
-    public CompletableFuture<Void> addSpaceToDatabase(Space space, String userId) {
+    public CompletableFuture<Void> updateSpaceInDatabase(Space space, String userId) {
         DatabaseReference spacesRef = database.getReference("users").child(userId).child("spaces");
-
         CompletableFuture<Void> future = new CompletableFuture<>();
 
-        // First, check if the space already exists
-        spacesRef.child(space.getSpaceName()).addListenerForSingleValueEvent(new ValueEventListener() {
+        DatabaseReference spaceRef = spacesRef.child(space.getSpaceName());
+        spaceRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
-                    Log.e("Database", "Space with the same name already exists");
-                    future.completeExceptionally(new Exception("Space with the same name already exists"));
-                } else {
-                    // Space does not exist, add new space
-                    spacesRef.child(space.getSpaceName()).setValue(space).addOnCompleteListener(task -> {
+                    spaceRef.setValue(space).addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
-                            Log.d("Database", "Space added successfully");
+                            Log.d("Database", "Space updated successfully");
                             future.complete(null);
                         } else {
-                            Log.e("Database", "Failed to add space", task.getException());
+                            Log.e("Database", "Failed to update space", task.getException());
                             future.completeExceptionally(task.getException());
                         }
                     });
-
-                    // Add plants to the database if any
-                    space.getPlantList().forEach(plant -> addPlantToDatabase(userId, space.getSpaceName(), plant));
+                } else {
+                    Log.e("Database", "Space does not exist and cannot be updated");
+                    future.completeExceptionally(new Exception("Space does not exist and cannot be updated"));
                 }
             }
 
@@ -168,6 +158,54 @@ public class DatabaseHelper {
 
         return future;
     }
+
+    public CompletableFuture<Void> addSpaceToDatabase(Space space, String userId) {
+        DatabaseReference spacesRef = database.getReference("users").child(userId).child("spaces");
+        DatabaseReference spaceRef = spacesRef.child(space.getSpaceName());
+        CompletableFuture<Void> future = new CompletableFuture<>();
+
+        spaceRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    Space existingSpace = dataSnapshot.getValue(Space.class);
+                    if (!existingSpace.getPlantList().equals(space.getPlantList())) {
+                        Log.d("Database", "Updating space due to plantList changes.");
+                        updateSpaceInDatabase(space, userId).thenAccept(aVoid -> {
+                            Log.d("Database", "Space updated successfully with new plants.");
+                            future.complete(null);
+                        }).exceptionally(throwable -> {
+                            Log.e("Database", "Failed to update space with new plants.", throwable);
+                            future.completeExceptionally(throwable);
+                            return null;
+                        });
+                    } else {
+                        Log.d("Database", "No changes in plantList, no update needed.");
+                        future.complete(null);
+                    }
+                } else {
+                    spaceRef.setValue(space).addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            Log.d("Database", "Space added successfully");
+                            future.complete(null);
+                        } else {
+                            Log.e("Database", "Failed to add space", task.getException());
+                            future.completeExceptionally(task.getException());
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.e("Database", "Error checking if space exists", databaseError.toException());
+                future.completeExceptionally(databaseError.toException());
+            }
+        });
+
+        return future;
+    }
+
 
     public void addUserToDatabase() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -191,7 +229,6 @@ public class DatabaseHelper {
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
-                    // Handle possible cancellations
                     Log.e("WaterYourPlants", "Database operation was cancelled.");
                 }
             });

@@ -4,14 +4,17 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -80,6 +83,7 @@ public class PlantsListFragment extends Fragment {
             for (Space el : spaceManager.searchSpace(name)) {
                 linearLayout.addView(generateSpaceView(getActivity(),el));
             }
+            //todo: adding a button at the end
         } catch (CouldNotFindException e) {
             //to do or not idk
         }
@@ -153,7 +157,7 @@ public class PlantsListFragment extends Fragment {
                 intent.putExtra("spaceName", space.getSpaceName());
 
                 Gson gson = new Gson();
-                String json = gson.toJson(spaceManager);
+                String json = gson.toJson(spaceManager.getSpaceList());
                 intent.putExtra("spaceManager", json);
 
                 context.startActivity(intent);
@@ -178,10 +182,10 @@ public class PlantsListFragment extends Fragment {
             buttonModify.setOnClickListener(v -> {
                 AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
                 LayoutInflater inflaterForDialog1 = LayoutInflater.from(context);
-                View dialogView1 = inflaterForDialog1.inflate(R.layout.modify_space_name_dialog, null);  // use the layout you provided
+                View dialogView1 = inflaterForDialog1.inflate(R.layout.modify_space_name_dialog, null);
 
                 TextInputEditText editText1 = dialogView1.findViewById(R.id.editTextCustom);
-                editText1.setText(space.getSpaceName());  // pre-fill the current name
+                editText1.setText(space.getSpaceName());
 
                 builder1.setView(dialogView1);
                 AlertDialog dialog1 = builder1.create();
