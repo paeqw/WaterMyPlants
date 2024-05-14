@@ -1,14 +1,17 @@
 package paeqw.app.activities;
 
-import static android.view.ViewGroup.LayoutParams;
-
+import android.app.Dialog;
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.GridLayout;
@@ -16,7 +19,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
+import com.google.android.material.button.MaterialButton;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
@@ -88,15 +93,29 @@ public class SpaceDetailActivity extends AppCompatActivity {
         int desiredWidth = screenWidth / 2;
         int desiredHeight = (int) (desiredWidth * 16 / 9.0);
 
-        Button button = new Button(context);
-        button.setText(R.string.add_new_plant_button);
-        button.setBackgroundColor(getResources().getColor(R.color.lighterGray,null));
-        button.setBackgroundResource(R.drawable.rounded_square);
+        MaterialButton button = new MaterialButton(context);
+
+        Drawable icon = ContextCompat.getDrawable(context, R.drawable.add_24px);
+        button.setIcon(icon);
+        button.setIconGravity(MaterialButton.ICON_GRAVITY_TEXT_START);
+
+        button.setIconTint(ColorStateList.valueOf(ContextCompat.getColor(context, R.color.white)));
+
+        button.setBackgroundColor(ContextCompat.getColor(context, R.color.lighterGray));
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showAddPlantDialog();
+            }
+        });
+
         GridLayout.LayoutParams frameLayoutParams = new GridLayout.LayoutParams();
         frameLayoutParams.width = desiredWidth;
         frameLayoutParams.height = desiredHeight;
         frameLayoutParams.setMargins(10, 10, 10, 10);
         button.setLayoutParams(frameLayoutParams);
+
         return button;
     }
 
@@ -164,7 +183,37 @@ public class SpaceDetailActivity extends AppCompatActivity {
         return frameLayout1;
     }
 
+    private void showAddPlantDialog() {
+        Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.add_plant_to_space_dialog);
 
+        Window window = dialog.getWindow();
+        if (window != null) {
+            window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            window.setBackgroundDrawableResource(android.R.color.transparent);
+        }
 
+        Button buttonAddByName = dialog.findViewById(R.id.buttonAddByName);
+        Button buttonAddByScaning = dialog.findViewById(R.id.buttonAddByScaning);
+
+        buttonAddByName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO: Add logic
+                dialog.dismiss();
+            }
+        });
+
+        buttonAddByScaning.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO: Add logic
+                dialog.dismiss();
+            }
+        });
+
+        // Show the dialog
+        dialog.show();
+    }
 
 }
