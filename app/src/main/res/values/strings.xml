@@ -60,5 +60,8 @@
 <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="add_new_plant_button">Add new plant</string>
+    <string name="add_plant_by_searching_button">Add plant by searching</string>
+    <string name="add_plant_by_scanning_button">Add plant by scanning</string>
+    <string name="add_a_plant_text">Add a plant</string>
 
 </resources>

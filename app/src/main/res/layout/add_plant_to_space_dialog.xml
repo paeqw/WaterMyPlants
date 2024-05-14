@@ -1,0 +1,49 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="@drawable/rounded_square"
+    android:backgroundTint="@color/darkerGray"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:id="@+id/text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/add_a_plant_text"
+        android:textSize="20sp"
+        android:layout_gravity="center"
+        android:textColor="@color/white" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
+
+        <Button
+            style="?attr/buttonBarStyle"
+            android:backgroundTint="@color/lightSeaGreen"
+            android:id="@+id/buttonAddByName"
+            android:layout_marginTop="20dp"
+            android:layout_gravity="center"
+            android:layout_marginHorizontal="60dp"
+            app:icon="@drawable/search_24px"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/add_plant_by_searching_button" />
+
+        <Button
+            style="?attr/buttonBarStyle"
+            android:backgroundTint="@color/lightSeaGreen"
+            android:id="@+id/buttonAddByScaning"
+            android:layout_marginTop="5dp"
+            android:layout_gravity="center"
+            android:layout_marginHorizontal="60dp"
+            app:icon="@drawable/photo_camera_24px"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/add_plant_by_scanning_button" />
+    </LinearLayout>
+</LinearLayout>
