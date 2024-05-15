@@ -46,6 +46,8 @@
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:padding="8dp"
+            android:inputType="text"
+            android:maxLines="1"
             android:id="@+id/searchField"
             android:layout_height="match_parent"
             android:backgroundTint="#2C2C34"

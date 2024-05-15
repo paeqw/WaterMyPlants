@@ -1,7 +1,7 @@
 <resources>
     <!--main-->
     <string name="app_name">Water my plants</string>
-    <string name="default_web_client_id">210973644212-5jr5neimt247egm39m5lqovm0d5heuv8.apps.googleusercontent.com</string>
+    <string name="default_web_client_id" translatable="false">210973644212-5jr5neimt247egm39m5lqovm0d5heuv8.apps.googleusercontent.com</string>
 
     <!--settings-->
 
