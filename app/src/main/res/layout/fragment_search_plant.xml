@@ -16,7 +16,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Search plant by name"
+            android:text="@string/search_plant_by_name_text"
             android:textColor="@color/white"
             android:textSize="20sp"
             android:paddingVertical="10dp"
