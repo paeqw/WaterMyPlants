@@ -1,5 +1,7 @@
 package paeqw.app.fragments;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -23,6 +25,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import java.util.List;
 
 import paeqw.app.R;
+import paeqw.app.activities.PlantDetailsActivity;
 import paeqw.app.helpers.PlantResponse;
 import paeqw.app.helpers.RetrofitClient;
 import paeqw.app.interfaces.PlantApiService;
@@ -84,7 +87,7 @@ public class SearchPlantFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        searchPlants(""); // Fetch and display plants when fragment becomes visible
+        searchPlants("");
     }
 
     private void searchPlants(String query) {
@@ -129,32 +132,46 @@ public class SearchPlantFragment extends Fragment {
         LayoutInflater inflater = LayoutInflater.from(getContext());
 
         for (PlantApi plant : plants) {
-            View plantView = inflater.inflate(R.layout.plant_search_template, linearLayout, false);
-
-            ShapeableImageView plantImage = plantView.findViewById(R.id.plant_image);
-            TextView plantName = plantView.findViewById(R.id.plant_name);
-            TextView scientificName = plantView.findViewById(R.id.scientific_name);
-
-            plantName.setText(plant.getCommonName());
-            scientificName.setText(TextUtils.join(", ", plant.getScientificName()));
-
-            if (plant.getDefaultImage() != null && plant.getDefaultImage().getMediumUrl() != null) {
-                Glide.with(this)
-                        .load(plant.getDefaultImage().getMediumUrl())
-                        .into(plantImage);
-            } else {
-                plantImage.setImageResource(R.drawable.placeholderimage);
-            }
-
-            // Update layout parameters and set gravity to center
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                    GridLayout.LayoutParams.WRAP_CONTENT,
-                    GridLayout.LayoutParams.WRAP_CONTENT);
-            params.gravity = Gravity.CENTER;
-            params.setMargins(10, 10, 10, 10);
-            plantView.setLayoutParams(params);
-
-            linearLayout.addView(plantView);
+            linearLayout.addView(createPlantView(plant, inflater, getContext()));
         }
+    }
+    private View createPlantView(PlantApi plant, LayoutInflater inflater, Context context) {
+
+        View plantView = inflater.inflate(R.layout.plant_search_template, linearLayout, false);
+
+        ShapeableImageView plantImage = plantView.findViewById(R.id.plant_image);
+        TextView plantName = plantView.findViewById(R.id.plant_name);
+        TextView scientificName = plantView.findViewById(R.id.scientific_name);
+
+        plantName.setText(plant.getCommonName());
+        scientificName.setText(TextUtils.join(", ", plant.getScientificName()));
+
+        if (plant.getDefaultImage() != null && plant.getDefaultImage().getMediumUrl() != null) {
+            Glide.with(this)
+                    .load(plant.getDefaultImage().getMediumUrl())
+                    .into(plantImage);
+        } else {
+            plantImage.setImageResource(R.drawable.placeholderimage);
+        }
+
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                GridLayout.LayoutParams.WRAP_CONTENT,
+                GridLayout.LayoutParams.WRAP_CONTENT);
+        params.gravity = Gravity.CENTER;
+        params.setMargins(10, 10, 10, 10);
+        plantView.setLayoutParams(params);
+
+        plantView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getContext(), PlantDetailsActivity.class);
+                intent.putExtra("plant_id", plant.getId()); // Assuming PlantApi has a method getId()
+                startActivity(intent);
+            }
+        });
+
+        return plantView;
+
+
     }
 }

@@ -1,6 +1,8 @@
 package paeqw.app.models;
 
-public class DefaultImage {
+import java.io.Serializable;
+
+public class DefaultImage implements Serializable {
     private String medium_url;
 
     public String getMediumUrl() {
