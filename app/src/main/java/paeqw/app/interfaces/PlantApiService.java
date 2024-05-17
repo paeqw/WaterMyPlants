@@ -1,6 +1,7 @@
 package paeqw.app.interfaces;
 
 import paeqw.app.helpers.PlantResponse;
+import paeqw.app.models.CareGuideApi;
 import paeqw.app.models.PlantApi;
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -19,6 +20,9 @@ public interface PlantApiService {
     );
     @GET("api/species/details/{id}")
     Call<PlantApi> getPlantDetails(@Path("id") int id, @Query("key") String apiKey);
+
+    @GET("api/species-care-guide-list")
+    Call<CareGuideApi> getCareGuides(@Query("species_id") int plantId, @Query("key") String apiKey);
 }
 
 
