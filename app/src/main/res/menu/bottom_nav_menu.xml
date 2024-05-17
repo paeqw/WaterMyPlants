@@ -4,7 +4,7 @@
 
     <item
         android:id="@+id/nav_item1"
-        android:icon="@drawable/potted_plant_24px"
+        android:icon="@drawable/psychiatry_24px"
         android:title="@string/menu_icon_my_plants"
         app:showAsAction="ifRoom" />
     <item

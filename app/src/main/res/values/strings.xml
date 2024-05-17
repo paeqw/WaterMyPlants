@@ -64,5 +64,10 @@
     <string name="add_plant_by_scanning_button">Add plant by scanning</string>
     <string name="add_a_plant_text">Add a plant</string>
     <string name="search_plant_by_name_text">Search plant by name</string>
+    <string name="big_image_desc">Big image of plant</string>
+    <string name="small_image_top_desc">Small plant image</string>
+    <string name="info_about_plant_text">Info about plant:</string>
+    <string name="the_care_schedule_will_be_based_on_these_requriements_text">The care schedule will be based on these requriements</string>
+    <string name="plant_requirements_text">Plant requirements</string>
 
 </resources>
