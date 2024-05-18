@@ -7,7 +7,7 @@ import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-
+import androidx.lifecycle.ViewModelProvider;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
@@ -23,6 +23,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,15 +36,18 @@ import paeqw.app.R;
 import paeqw.app.activities.SpaceDetailActivity;
 import paeqw.app.collections.SpaceManager;
 import paeqw.app.exceptions.CouldNotFindException;
+import paeqw.app.models.SharedViewModel;
 import paeqw.app.models.Space;
 
 public class PlantsListFragment extends Fragment {
+    private SharedViewModel sharedViewModel;
     LinearLayout linearLayout;
     SpaceManager spaceManager;
     Button addSpaceButton;
     EditText searchField;
-    public PlantsListFragment() {
+    ProgressBar progressBar;
 
+    public PlantsListFragment() {
     }
 
     public static PlantsListFragment newInstance() {
@@ -56,54 +60,73 @@ public class PlantsListFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
+        Log.d("PlantsListFragment", "SharedViewModel hash code: " + sharedViewModel.hashCode());
+
+        spaceManager = new SpaceManager(getActivity());
+        sharedViewModel.setSpaceManager(spaceManager);
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_plants_list, container, false);
         initViews(rootView);
         initListeners();
-        spaceManager = new SpaceManager(getActivity());
+
+        spaceManager = sharedViewModel.getSpaceManager();
+
+        progressBar.setVisibility(View.VISIBLE);
+        linearLayout.setVisibility(View.GONE);
+
         spaceManager.loadFromDatabase().thenRun(() -> {
             spaceManager.loadFromSharedPreferences();
-            showViews();
+            getActivity().runOnUiThread(() -> {
+                // Hide ProgressBar and show data views
+                progressBar.setVisibility(View.GONE);
+                linearLayout.setVisibility(View.VISIBLE);
+                showViews();
+            });
         });
 
         return rootView;
     }
+
+
     private void showViews() {
         linearLayout.removeAllViews();
         for (Space el : spaceManager.getSpaceList()) {
-            linearLayout.addView(generateSpaceView(getActivity(),el));
+            linearLayout.addView(generateSpaceView(getActivity(), el));
         }
     }
+
     private void showViews(String name) {
         linearLayout.removeAllViews();
         try {
             for (Space el : spaceManager.searchSpace(name)) {
-                linearLayout.addView(generateSpaceView(getActivity(),el));
+                linearLayout.addView(generateSpaceView(getActivity(), el));
             }
-            //todo: adding a button at the end
         } catch (CouldNotFindException e) {
-            //to do or not idk
+            // Handle the exception
         }
     }
 
-    private void saveViews(){
+    private void saveViews() {
         spaceManager.saveToSharedPreferences();
     }
-    private void initViews(View rootView){
+
+    private void initViews(View rootView) {
         linearLayout = rootView.findViewById(R.id.linear);
         addSpaceButton = rootView.findViewById(R.id.addSpaceButton);
         searchField = rootView.findViewById(R.id.searchField);
+        progressBar = rootView.findViewById(R.id.progressBar);  // Initialize ProgressBar
     }
 
-    private void initListeners(){
+    private void initListeners() {
         addSpaceButton.setOnClickListener(v -> addSpaceButtonClicked());
         searchField.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
             }
 
             @Override
@@ -113,10 +136,10 @@ public class PlantsListFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable editable) {
-
             }
         });
     }
+
     private void addSpaceButtonClicked() {
         Dialog dialog = new Dialog(getActivity());
         dialog.setContentView(R.layout.add_space_dialog);
@@ -140,6 +163,7 @@ public class PlantsListFragment extends Fragment {
 
         dialog.show();
     }
+
     private View generateSpaceView(Context context, Space space) {
         LayoutInflater inflater = LayoutInflater.from(context);
         FrameLayout frameLayout = (FrameLayout) inflater.inflate(R.layout.space_view_template, null);
@@ -212,7 +236,6 @@ public class PlantsListFragment extends Fragment {
                         saveViews();
                         dialog.dismiss();
                         dialog1.dismiss();
-
                     } else {
                         editText1.setError("Name cannot be empty");
                     }
@@ -241,5 +264,4 @@ public class PlantsListFragment extends Fragment {
 
         return frameLayout;
     }
-
 }

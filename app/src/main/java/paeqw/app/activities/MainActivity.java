@@ -14,14 +14,19 @@ import paeqw.app.fragments.MoreFragment;
 import paeqw.app.fragments.PlantsListFragment;
 import paeqw.app.fragments.ScanPlantFragment;
 import paeqw.app.fragments.SearchPlantFragment;
+import paeqw.app.models.SharedViewModel;
+
+import androidx.lifecycle.ViewModelProvider;
 
 public class MainActivity extends AppCompatActivity {
-
+    private SharedViewModel sharedViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        sharedViewModel = new ViewModelProvider(this).get(SharedViewModel.class);
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnItemSelectedListener(item -> {
@@ -49,15 +54,5 @@ public class MainActivity extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, fragment)
                 .commit();
-    }
-
-
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        Intent intent = new Intent(this, StartActivity.class);
-        intent.putExtra("shouldFinish", true);
-        startActivity(intent);
     }
 }

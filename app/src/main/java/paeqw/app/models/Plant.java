@@ -6,7 +6,7 @@ public class Plant {
     private String name;
     private LocalDateTime whenLastWatered;
     private String imageUrl;
-
+    private int wateringInterval;
     public Plant() {
     }
 
@@ -23,6 +23,13 @@ public class Plant {
         this.name = name;
         this.whenLastWatered = whenLastWatered;
         this.imageUrl = imageUrl;
+    }
+
+    public Plant(String name, LocalDateTime whenLastWatered, String imageUrl, int wateringInterval) {
+        this.name = name;
+        this.whenLastWatered = whenLastWatered;
+        this.imageUrl = imageUrl;
+        this.wateringInterval = wateringInterval;
     }
 
     public String getName() {
