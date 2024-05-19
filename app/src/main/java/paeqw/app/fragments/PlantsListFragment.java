@@ -30,6 +30,7 @@ import android.widget.Toast;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.gson.Gson;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import paeqw.app.R;
@@ -41,32 +42,23 @@ import paeqw.app.models.Space;
 
 public class PlantsListFragment extends Fragment {
     private SharedViewModel sharedViewModel;
-    LinearLayout linearLayout;
-    SpaceManager spaceManager;
-    Button addSpaceButton;
-    EditText searchField;
-    ProgressBar progressBar;
+    private SpaceManager spaceManager;
+    private LinearLayout linearLayout;
+    private Button addSpaceButton;
+    private EditText searchField;
+    private ProgressBar progressBar;
 
-    public PlantsListFragment() {
-    }
+    public PlantsListFragment() {}
 
     public static PlantsListFragment newInstance() {
-        PlantsListFragment fragment = new PlantsListFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-        return fragment;
+        return new PlantsListFragment();
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
-        Log.d("PlantsListFragment", "SharedViewModel hash code: " + sharedViewModel.hashCode());
-
-        spaceManager = new SpaceManager(getActivity());
-        sharedViewModel.setSpaceManager(spaceManager);
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -74,7 +66,9 @@ public class PlantsListFragment extends Fragment {
         initViews(rootView);
         initListeners();
 
-        spaceManager = sharedViewModel.getSpaceManager();
+
+        spaceManager = new SpaceManager(getActivity());
+
 
         progressBar.setVisibility(View.VISIBLE);
         linearLayout.setVisibility(View.GONE);
@@ -82,7 +76,6 @@ public class PlantsListFragment extends Fragment {
         spaceManager.loadFromDatabase().thenRun(() -> {
             spaceManager.loadFromSharedPreferences();
             getActivity().runOnUiThread(() -> {
-                // Hide ProgressBar and show data views
                 progressBar.setVisibility(View.GONE);
                 linearLayout.setVisibility(View.VISIBLE);
                 showViews();
@@ -92,42 +85,18 @@ public class PlantsListFragment extends Fragment {
         return rootView;
     }
 
-
-    private void showViews() {
-        linearLayout.removeAllViews();
-        for (Space el : spaceManager.getSpaceList()) {
-            linearLayout.addView(generateSpaceView(getActivity(), el));
-        }
-    }
-
-    private void showViews(String name) {
-        linearLayout.removeAllViews();
-        try {
-            for (Space el : spaceManager.searchSpace(name)) {
-                linearLayout.addView(generateSpaceView(getActivity(), el));
-            }
-        } catch (CouldNotFindException e) {
-            // Handle the exception
-        }
-    }
-
-    private void saveViews() {
-        spaceManager.saveToSharedPreferences();
-    }
-
     private void initViews(View rootView) {
         linearLayout = rootView.findViewById(R.id.linear);
         addSpaceButton = rootView.findViewById(R.id.addSpaceButton);
         searchField = rootView.findViewById(R.id.searchField);
-        progressBar = rootView.findViewById(R.id.progressBar);  // Initialize ProgressBar
+        progressBar = rootView.findViewById(R.id.progressBar);
     }
 
     private void initListeners() {
         addSpaceButton.setOnClickListener(v -> addSpaceButtonClicked());
         searchField.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -135,8 +104,7 @@ public class PlantsListFragment extends Fragment {
             }
 
             @Override
-            public void afterTextChanged(Editable editable) {
-            }
+            public void afterTextChanged(Editable editable) {}
         });
     }
 
@@ -164,6 +132,28 @@ public class PlantsListFragment extends Fragment {
         dialog.show();
     }
 
+    private void showViews() {
+        linearLayout.removeAllViews();
+        for (Space el : spaceManager.getSpaceList()) {
+            linearLayout.addView(generateSpaceView(getActivity(), el));
+        }
+    }
+
+    private void showViews(String name) {
+        linearLayout.removeAllViews();
+        try {
+            for (Space el : spaceManager.searchSpace(name)) {
+                linearLayout.addView(generateSpaceView(getActivity(), el));
+            }
+        } catch (CouldNotFindException e) {
+            // Handle the exception
+        }
+    }
+
+    private void saveViews() {
+        spaceManager.saveToSharedPreferences();
+    }
+
     private View generateSpaceView(Context context, Space space) {
         LayoutInflater inflater = LayoutInflater.from(context);
         FrameLayout frameLayout = (FrameLayout) inflater.inflate(R.layout.space_view_template, null);
@@ -179,10 +169,11 @@ public class PlantsListFragment extends Fragment {
             public void onClick(View v) {
                 Intent intent = new Intent(context, SpaceDetailActivity.class);
                 intent.putExtra("spaceName", space.getSpaceName());
+/*
+                intent.putExtra("spaceManager", spaceManager); // Pass the entire SpaceManager
+*/
 
-                Gson gson = new Gson();
-                String json = gson.toJson(spaceManager.getSpaceList());
-                intent.putExtra("spaceManager", json);
+                sharedViewModel.setSpaceList(spaceManager.getSpaceList());
 
                 context.startActivity(intent);
             }

@@ -1,18 +1,17 @@
 package paeqw.app.models;
 
-import android.content.Context;
-
 import androidx.lifecycle.ViewModel;
-import paeqw.app.collections.SpaceManager;
+
+import java.util.List;
 
 public class SharedViewModel extends ViewModel {
-    private SpaceManager spaceManager;
+    private List<Space> spaceList;
 
-    public SpaceManager getSpaceManager() {
-        return spaceManager;
+    public List<Space> getSpaceList() {
+        return spaceList;
     }
 
-    public void setSpaceManager(SpaceManager spaceManager) {
-        this.spaceManager = spaceManager;
+    public void setSpaceList(List<Space> spaceList) {
+        this.spaceList = spaceList;
     }
 }

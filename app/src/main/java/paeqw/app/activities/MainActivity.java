@@ -9,6 +9,7 @@ import android.os.Bundle;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import paeqw.app.R;
+import paeqw.app.collections.SpaceManager;
 import paeqw.app.fragments.BlogFragment;
 import paeqw.app.fragments.MoreFragment;
 import paeqw.app.fragments.PlantsListFragment;
@@ -19,14 +20,11 @@ import paeqw.app.models.SharedViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 public class MainActivity extends AppCompatActivity {
-    private SharedViewModel sharedViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        sharedViewModel = new ViewModelProvider(this).get(SharedViewModel.class);
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnItemSelectedListener(item -> {
@@ -56,3 +54,4 @@ public class MainActivity extends AppCompatActivity {
                 .commit();
     }
 }
+

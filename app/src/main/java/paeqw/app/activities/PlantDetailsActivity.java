@@ -32,6 +32,7 @@ import paeqw.app.models.CareGuideApi;
 import paeqw.app.models.PlantApi;
 import paeqw.app.helpers.AnimationUtils;
 import paeqw.app.models.SharedViewModel;
+import paeqw.app.models.Space;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -39,7 +40,7 @@ import retrofit2.Retrofit;
 
 public class PlantDetailsActivity extends AppCompatActivity {
     private SharedViewModel sharedViewModel;
-    private SpaceManager spaceManager;
+    private List<Space> spaceList;
     private static final String TAG = "PlantDetailsActivity";
     private static final String API_KEY = "sk-y3wB66450eb6dac165507";
     private TextView commonNameTextView;
@@ -58,19 +59,18 @@ public class PlantDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_plant_details);
 
+        Retrofit retrofit = RetrofitClient.getClient("https://perenual.com/");
+        apiService = retrofit.create(PlantApiService.class);
+
         sharedViewModel = new ViewModelProvider(this).get(SharedViewModel.class);
-        Log.d(TAG, "SharedViewModel hash code: " + sharedViewModel.hashCode());
+        spaceList = sharedViewModel.getSpaceList();
 
-        spaceManager = sharedViewModel.getSpaceManager();
-
-        if (spaceManager == null) {
-            Log.e(TAG, "SpaceManager is null");
-            Toast.makeText(this, "Failed to load SpaceManager", Toast.LENGTH_LONG).show();
-            finish(); // Or any other appropriate error handling
-            return;
+        if (spaceList == null) {
+            Log.e(TAG, "Space list is null");
+            Toast.makeText(this, "Failed to load space list", Toast.LENGTH_LONG).show();
+        } else {
+            Log.d(TAG, "Space list size: " + spaceList.size());
         }
-
-        Log.d(TAG, "SpaceManager size: " + spaceManager.getSpaceList().size());
 
         initViews();
 
