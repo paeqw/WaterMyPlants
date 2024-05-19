@@ -15,7 +15,9 @@ import paeqw.app.helpers.DatabaseHelper;
 import paeqw.app.helpers.SharedPreferencesHelper;
 import paeqw.app.models.Space;
 
-public class SpaceManager {
+import java.io.Serializable;
+
+public class SpaceManager implements Serializable {
     List<Space> spaceList;
     Context context;
     DatabaseHelper databaseHelper;
@@ -31,11 +33,12 @@ public class SpaceManager {
         this.context = context;
         databaseHelper = new DatabaseHelper();
     }
+
     public void saveToSharedPreferences() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
             String userId = user.getUid();
-            for (Space el:spaceList) {
+            for (Space el : spaceList) {
                 databaseHelper.addSpaceToDatabase(el, userId);
             }
         }
@@ -73,13 +76,13 @@ public class SpaceManager {
                 });
     }
 
-
     public void addSpace(Space space) {
-        for (Space el: spaceList) {
-            if(el.getSpaceName().equalsIgnoreCase(space.getSpaceName())) return;
+        for (Space el : spaceList) {
+            if (el.getSpaceName().equalsIgnoreCase(space.getSpaceName())) return;
         }
         spaceList.add(space);
     }
+
     public void removeSpace(Space space) throws CouldNotFindException {
         spaceList.remove(space);
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -88,12 +91,13 @@ public class SpaceManager {
             databaseHelper.removeSpaceFromDatabase(space.getSpaceName(), userId);
         }
     }
+
     public List<Space> searchSpace(String name) throws CouldNotFindException {
         List<Space> searchResult = new ArrayList<>();
-        for (Space el: spaceList) {
+        for (Space el : spaceList) {
             if (el.getSpaceName().toLowerCase().startsWith(name.toLowerCase())) searchResult.add(el);
         }
-        if(!searchResult.isEmpty()) return searchResult;
+        if (!searchResult.isEmpty()) return searchResult;
         throw new CouldNotFindException("Could not find space with given name");
     }
 
