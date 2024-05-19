@@ -1,5 +1,6 @@
 package paeqw.app.activities;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -7,16 +8,19 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.view.Window;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
 
@@ -25,13 +29,13 @@ import java.util.List;
 
 import paeqw.app.R;
 import paeqw.app.collections.SpaceManager;
+import paeqw.app.helpers.AnimationUtils;
 import paeqw.app.helpers.RetrofitClient;
 import paeqw.app.interfaces.PlantApiService;
 import paeqw.app.models.CareGuide;
 import paeqw.app.models.CareGuideApi;
+import paeqw.app.models.Plant;
 import paeqw.app.models.PlantApi;
-import paeqw.app.helpers.AnimationUtils;
-import paeqw.app.models.SharedViewModel;
 import paeqw.app.models.Space;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -39,11 +43,11 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 
 public class PlantDetailsActivity extends AppCompatActivity {
-    private SharedViewModel sharedViewModel;
-    private List<Space> spaceList;
     private static final String TAG = "PlantDetailsActivity";
     private static final String API_KEY = "sk-y3wB66450eb6dac165507";
     private TextView commonNameTextView;
+    private Button buttonAddToSpace;
+    private List<Space> spaceList;
     private TextView scientificNameTextView;
     private TextView descriptionTextView;
     private LinearLayout detailsLayout;
@@ -53,6 +57,8 @@ public class PlantDetailsActivity extends AppCompatActivity {
     private ImageView smallTopImage;
     private ImageView smallBottomImage;
     private PlantApiService apiService;
+    private SpaceManager spaceManager;
+    private PlantApi plant;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,25 +68,20 @@ public class PlantDetailsActivity extends AppCompatActivity {
         Retrofit retrofit = RetrofitClient.getClient("https://perenual.com/");
         apiService = retrofit.create(PlantApiService.class);
 
-        sharedViewModel = new ViewModelProvider(this).get(SharedViewModel.class);
-        spaceList = sharedViewModel.getSpaceList();
+        spaceManager = new SpaceManager(this);
+        spaceManager.loadFromDatabase().thenRun(() -> {
+            spaceList = spaceManager.getSpaceList();
+            initViews();
+            initListeners();
 
-        if (spaceList == null) {
-            Log.e(TAG, "Space list is null");
-            Toast.makeText(this, "Failed to load space list", Toast.LENGTH_LONG).show();
-        } else {
-            Log.d(TAG, "Space list size: " + spaceList.size());
-        }
+            Intent intent = getIntent();
+            int plantId = intent.getIntExtra("plant_id", -1);
 
-        initViews();
-
-        Intent intent = getIntent();
-        int plantId = intent.getIntExtra("plant_id", -1);
-
-        if (plantId != -1) {
-            fetchPlantDetails(plantId);
-            fetchCareGuides(plantId);
-        }
+            if (plantId != -1) {
+                fetchPlantDetails(plantId);
+                fetchCareGuides(plantId);
+            }
+        });
     }
 
     private void initViews() {
@@ -93,6 +94,37 @@ public class PlantDetailsActivity extends AppCompatActivity {
         smallTopImage = findViewById(R.id.smallTop);
         horizontalSquares = findViewById(R.id.horizontalSquares);
         smallBottomImage = findViewById(R.id.smalBottom);
+        buttonAddToSpace = findViewById(R.id.buttonAddToSpace);
+    }
+    private void initListeners() {
+        buttonAddToSpace.setOnClickListener(view -> clickedButtonAddToSpace());
+    }
+    private void clickedButtonAddToSpace() {
+        Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.add_to_space_dialog);
+
+        Window window = dialog.getWindow();
+        if (window != null) {
+            window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            window.setBackgroundDrawableResource(android.R.color.transparent);
+        }
+
+        Spinner spinner = dialog.findViewById(R.id.spinner);
+        Button button = dialog.findViewById(R.id.buttonSubmit);
+
+        // Set up the spinner with spaceList
+        ArrayAdapter<Space> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, spaceList);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+
+        button.setOnClickListener(view -> {
+            Space selectedSpace = (Space) spinner.getSelectedItem();
+            selectedSpace.addPlant(new Plant(plant.getCommonName(), null,plant.getDefaultImage().getMediumUrl(),plant.getWateringGeneralBenchmark().getWhenWater()));
+            spaceManager.saveToSharedPreferences();
+            dialog.dismiss();
+        });
+
+        dialog.show();
     }
 
     private void fetchPlantDetails(int plantId) {
@@ -101,7 +133,7 @@ public class PlantDetailsActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<PlantApi> call, Response<PlantApi> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    PlantApi plant = response.body();
+                    plant = response.body();
                     displayPlantDetails(plant);
                 } else {
                     Log.e(TAG, "Response unsuccessful or body is null");
@@ -143,8 +175,8 @@ public class PlantDetailsActivity extends AppCompatActivity {
         addFrameWithText("Type: ", plant.getType(), R.drawable.potted_plant_24px);
 
         if (plant.getHardiness() != null) {
-            addTextViewIfNotEmpty("Hardiness: ", plant.getHardiness().getMin() + " - " +
-                    plant.getHardiness().getMax());
+            addFrameWithText("Hardiness: ", plant.getHardiness().getMin() + " - " +
+                    plant.getHardiness().getMax(),R.drawable.add_24px);
         }
 
         addFrameWithText("Pruning Month: ", TextUtils.join(", ", plant.getPruningMonth()), R.drawable.pruning_24px);

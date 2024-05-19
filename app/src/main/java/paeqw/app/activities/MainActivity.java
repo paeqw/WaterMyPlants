@@ -15,7 +15,6 @@ import paeqw.app.fragments.MoreFragment;
 import paeqw.app.fragments.PlantsListFragment;
 import paeqw.app.fragments.ScanPlantFragment;
 import paeqw.app.fragments.SearchPlantFragment;
-import paeqw.app.models.SharedViewModel;
 
 import androidx.lifecycle.ViewModelProvider;
 
@@ -25,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnItemSelectedListener(item -> {

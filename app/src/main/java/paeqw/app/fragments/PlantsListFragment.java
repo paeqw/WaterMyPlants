@@ -37,11 +37,10 @@ import paeqw.app.R;
 import paeqw.app.activities.SpaceDetailActivity;
 import paeqw.app.collections.SpaceManager;
 import paeqw.app.exceptions.CouldNotFindException;
-import paeqw.app.models.SharedViewModel;
 import paeqw.app.models.Space;
 
 public class PlantsListFragment extends Fragment {
-    private SharedViewModel sharedViewModel;
+
     private SpaceManager spaceManager;
     private LinearLayout linearLayout;
     private Button addSpaceButton;
@@ -57,7 +56,6 @@ public class PlantsListFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
     }
 
     @Override
@@ -167,15 +165,13 @@ public class PlantsListFragment extends Fragment {
         frameLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.wtf("ASJKDHKAJSHDKJHASKJDHKAJHDKJAH","WORKING");
                 Intent intent = new Intent(context, SpaceDetailActivity.class);
+                Gson gson = new Gson();
+                String list = gson.toJson(spaceManager.getSpaceList());
                 intent.putExtra("spaceName", space.getSpaceName());
-/*
-                intent.putExtra("spaceManager", spaceManager); // Pass the entire SpaceManager
-*/
-
-                sharedViewModel.setSpaceList(spaceManager.getSpaceList());
-
-                context.startActivity(intent);
+                intent.putExtra("spaceManager", list);
+                startActivity(intent);
             }
         });
 

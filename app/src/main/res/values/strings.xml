@@ -69,5 +69,7 @@
     <string name="info_about_plant_text">Info about plant:</string>
     <string name="the_care_schedule_will_be_based_on_these_requriements_text">The care schedule will be based on these requriements</string>
     <string name="plant_requirements_text">Plant requirements</string>
+    <string name="add_to_space_button">Add to space...</string>
+    <string name="add_to_space">Add to space</string>
 
 </resources>

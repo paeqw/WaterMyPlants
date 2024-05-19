@@ -53,4 +53,9 @@ public class Space {
     public String getSpaceName() {
         return spaceName;
     }
+
+    @Override
+    public String toString() {
+        return spaceName;
+    }
 }
