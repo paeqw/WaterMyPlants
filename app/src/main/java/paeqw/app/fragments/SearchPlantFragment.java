@@ -32,7 +32,7 @@ import paeqw.app.helpers.PlantResponse;
 import paeqw.app.helpers.RetrofitClient;
 import paeqw.app.interfaces.PlantApiService;
 import paeqw.app.models.PlantApi;
-import paeqw.app.models.SharedViewModel;
+import paeqw.app.models.Space;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -41,7 +41,6 @@ import retrofit2.Retrofit;
 public class SearchPlantFragment extends Fragment {
     private static final String TAG = "SearchPlantFragment";
     private static final String API_KEY = "sk-y3wB66450eb6dac165507";
-    private SharedViewModel sharedViewModel;
     private LinearLayout linearLayout;
     private TextInputEditText searchField;
     private ProgressBar progressBar;
@@ -62,7 +61,6 @@ public class SearchPlantFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate called");
-        sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
     }
 
     @Nullable
@@ -70,6 +68,7 @@ public class SearchPlantFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         Log.d(TAG, "onCreateView called");
         View view = inflater.inflate(R.layout.fragment_search_plant, container, false);
+
 
         linearLayout = view.findViewById(R.id.linearLayout);
         searchField = view.findViewById(R.id.searchField);

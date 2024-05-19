@@ -64,21 +64,6 @@ public class DatabaseHelper {
         return future;
     }
 
-    public CompletableFuture<Void> addPlantToDatabase(String userId, String spaceName, Plant plant) {
-        return verifyToken().thenCompose(aVoid -> {
-            DatabaseReference plantRef = database.getReference("users").child(userId).child("spaces").child(spaceName).child("plants").child(plant.getName());
-            CompletableFuture<Void> future = new CompletableFuture<>();
-            plantRef.setValue(plant).addOnCompleteListener(task -> {
-                if (task.isSuccessful()) {
-                    future.complete(null);
-                } else {
-                    future.completeExceptionally(task.getException());
-                }
-            });
-            return future;
-        });
-    }
-
     public CompletableFuture<Uri> uploadPlantImage(Uri fileUri, String userId, String spaceName, String plantName) {
         return verifyToken().thenCompose(aVoid -> {
             StorageReference fileRef = storage.getReference().child("images").child(userId).child(spaceName).child(plantName);

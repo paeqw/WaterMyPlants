@@ -7,6 +7,7 @@ public class Plant {
     private LocalDateTime whenLastWatered;
     private String imageUrl;
     private int wateringInterval;
+
     public Plant() {
     }
 
@@ -50,5 +51,17 @@ public class Plant {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public int getWateringInterval() {
+        return wateringInterval;
+    }
+
+    public void setWateringInterval(int wateringInterval) {
+        this.wateringInterval = wateringInterval;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

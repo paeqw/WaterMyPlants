@@ -9,17 +9,21 @@ public class WateringGeneralBenchmark {
     public String getUnit() { return unit; }
     public int getWhenWater() {
         int[] tab = getNumbersFromValue();
+        Log.e("asl;kjdlaksjdlkjaslkdjjasldjkalskjlkjaldkjlasjdlaj",tab[0]+ " " + tab[1]);
         return (tab[0] + tab[1])/2;
     }
 
     private int[] getNumbersFromValue() {
         try {
-            char[] tab = value.toCharArray();
-            return new int[]{tab[0], tab[2]};
+            String[] parts = value.split("-");
+
+            int number1 = Integer.parseInt(parts[0]);
+            int number2 = Integer.parseInt(parts[1]);
+
+            return new int[]{number1, number2};
         } catch (Exception e) {
             Log.e("WaterYourPlants.WateringGeneralBenchmark", "Oj nie");
         }
-
         return new int[0];
     }
 }
