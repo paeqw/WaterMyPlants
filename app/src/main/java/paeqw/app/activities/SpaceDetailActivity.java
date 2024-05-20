@@ -2,6 +2,7 @@ package paeqw.app.activities;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -180,8 +181,61 @@ public class SpaceDetailActivity extends AppCompatActivity {
 
 
         frameLayout1.addView(frameLayout);
+        frameLayout1.setOnClickListener(view -> {
+            showPlantDialog(plant);
+        });
         return frameLayout1;
     }
+
+    private void showPlantDialog(Plant plant) {
+        Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.plant_costam_dialog);
+
+        Window window = dialog.getWindow();
+        if (window != null) {
+            window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            window.setBackgroundDrawableResource(android.R.color.transparent);
+        }
+
+        Button buttonModify = dialog.findViewById(R.id.buttonModify);
+        Button buttonDelete = dialog.findViewById(R.id.buttonDelete);
+        TextView plantDialogTextView = dialog.findViewById(R.id.text);
+        plantDialogTextView.setText("Modifying plant:'"+ plant.getName() + "'");
+
+        buttonModify.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO: Add logic for modifying the plant
+                dialog.dismiss();
+            }
+        });
+
+        buttonDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    space.removePlant(plant);
+                } catch (CouldNotFindException e) {
+                    throw new RuntimeException(e);
+                }
+                List<Space> spaceList = spaceManager.getSpaceList();
+                    for (int i = 0; i < spaceList.size(); i++) {
+                        if (spaceList.get(i).getSpaceName().equalsIgnoreCase(space.getSpaceName())){
+                            spaceList.remove(i);
+                            spaceList.add(space);
+                        }
+                    }
+                    spaceManager.setSpaceList(spaceList);
+                    spaceManager.saveToSharedPreferences();
+                    showPlants();
+                dialog.dismiss();
+            }
+        });
+
+        // Show the dialog
+        dialog.show();
+    }
+
 
     private void showAddPlantDialog() {
         Dialog dialog = new Dialog(this);
@@ -199,16 +253,21 @@ public class SpaceDetailActivity extends AppCompatActivity {
         buttonAddByName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO: Add logic
                 dialog.dismiss();
+                Intent intent = new Intent(SpaceDetailActivity.this, MainActivity.class);
+                intent.putExtra("showFragment", "SearchPlantFragment");
+                startActivity(intent);
             }
         });
+
 
         buttonAddByScaning.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO: Add logic
                 dialog.dismiss();
+                Intent intent = new Intent(SpaceDetailActivity.this, MainActivity.class);
+                intent.putExtra("showFragment", "ScanPlantFragment");
+                startActivity(intent);
             }
         });
 

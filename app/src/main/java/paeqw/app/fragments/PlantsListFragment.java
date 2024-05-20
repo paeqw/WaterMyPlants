@@ -57,17 +57,24 @@ public class PlantsListFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
-
+    @Override
+    public void onResume() {
+        super.onResume();
+        loadData();
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_plants_list, container, false);
         initViews(rootView);
         initListeners();
 
+        loadData();
 
+        return rootView;
+    }
+
+    private void loadData() {
         spaceManager = new SpaceManager(getActivity());
-
-
         progressBar.setVisibility(View.VISIBLE);
         linearLayout.setVisibility(View.GONE);
 
@@ -79,8 +86,6 @@ public class PlantsListFragment extends Fragment {
                 showViews();
             });
         });
-
-        return rootView;
     }
 
     private void initViews(View rootView) {
