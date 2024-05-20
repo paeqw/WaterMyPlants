@@ -25,7 +25,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnItemSelectedListener(item -> {
             int itemId = item.getItemId();
@@ -46,6 +45,19 @@ public class MainActivity extends AppCompatActivity {
         if (savedInstanceState == null) {
             replaceFragment(new PlantsListFragment());
         }
+
+        // Handle the intent extra to show a specific fragment
+        if (getIntent().hasExtra("showFragment")) {
+            String fragmentToShow = getIntent().getStringExtra("showFragment");
+            if ("SearchPlantFragment".equals(fragmentToShow)) {
+                replaceFragment(new SearchPlantFragment());
+                bottomNavigationView.setSelectedItemId(R.id.nav_item2);
+            }
+            if ("ScanPlantFragment".equalsIgnoreCase(fragmentToShow)) {
+                replaceFragment(new ScanPlantFragment());
+                bottomNavigationView.setSelectedItemId(R.id.nav_item3);
+            }
+        }
     }
 
     private void replaceFragment(Fragment fragment) {
@@ -54,4 +66,3 @@ public class MainActivity extends AppCompatActivity {
                 .commit();
     }
 }
-

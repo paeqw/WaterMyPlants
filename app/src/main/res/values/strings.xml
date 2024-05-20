@@ -71,5 +71,7 @@
     <string name="plant_requirements_text">Plant requirements</string>
     <string name="add_to_space_button">Add to space...</string>
     <string name="add_to_space">Add to space</string>
+    <string name="delete_plant_button">Delete plant</string>
+    <string name="change_when_last_watered_button">Change when last watered</string>
 
 </resources>

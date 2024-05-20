@@ -1,13 +1,103 @@
-<?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.ScanPlantFragment">
+    tools:context=".fragments.ScanPlantFragment"
+    android:background="#1f1f27">
 
-    <TextView
+    <RelativeLayout
+        android:id="@+id/relative1"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="scan plant" />
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:background="#1F1F27">
 
-</FrameLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Scan Plant"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:paddingVertical="10dp"
+            android:layout_centerInParent="true" />
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/takePhotoButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Take Photo"
+        android:layout_below="@id/relative1"
+        android:layout_centerHorizontal="true"
+        android:layout_marginHorizontal="50dp"
+        android:layout_marginVertical="10dp"
+
+        style="?attr/buttonBarStyle"
+        android:backgroundTint="@color/lightSeaGreen"
+        android:textColor="@color/white" />
+
+    <Button
+        android:id="@+id/identifyPlantButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Identify Plant"
+        android:layout_below="@id/takePhotoButton"
+        android:layout_centerHorizontal="true"
+        android:layout_marginHorizontal="50dp"
+        android:layout_marginVertical="10dp"
+        style="?attr/buttonBarStyle"
+        android:backgroundTint="@color/lightSeaGreen"
+        android:textColor="@color/white" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_below="@id/identifyPlantButton"
+        android:layout_margin="10dp"
+        android:contentDescription="Captured photo will appear here"
+        android:scaleType="centerCrop"
+        android:background="#2C2C34" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/imageView"
+        android:layout_margin="10dp">
+
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_margin="10dp">
+
+            <TextView
+                android:id="@+id/resultTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textColor="@android:color/white"
+                android:padding="10dp"
+                android:background="#2C2C34"/>
+            <Button
+                android:id="@+id/addPlantButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Add plant"
+                android:clickable="false"
+                android:layout_marginHorizontal="30dp"
+                android:layout_marginVertical="20dp"
+                style="?attr/buttonBarStyle"
+                android:backgroundTint="@color/lightSeaGreen"
+                android:textColor="@color/white" />
+        </LinearLayout>
+    </ScrollView>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
+</RelativeLayout>

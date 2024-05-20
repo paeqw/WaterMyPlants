@@ -13,6 +13,7 @@ import java.util.concurrent.CompletableFuture;
 import paeqw.app.exceptions.CouldNotFindException;
 import paeqw.app.helpers.DatabaseHelper;
 import paeqw.app.helpers.SharedPreferencesHelper;
+import paeqw.app.models.Plant;
 import paeqw.app.models.Space;
 
 import java.io.Serializable;
@@ -28,13 +29,18 @@ public class SpaceManager implements Serializable {
         databaseHelper = new DatabaseHelper();
     }
 
+    public void setSpaceList(List<Space> spaceList) {
+        this.spaceList = spaceList;
+    }
+
     public SpaceManager(Context context) {
         spaceList = new ArrayList<>();
         this.context = context;
         databaseHelper = new DatabaseHelper();
     }
 
-    public void saveToSharedPreferences() {
+    public CompletableFuture<Void> saveToSharedPreferences() {
+        return CompletableFuture.runAsync(() -> {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
             String userId = user.getUid();
@@ -44,6 +50,7 @@ public class SpaceManager implements Serializable {
         }
         SharedPreferencesHelper sharedPreferencesHelper = new SharedPreferencesHelper(context);
         sharedPreferencesHelper.saveSpaces(spaceList);
+        });
     }
 
     public CompletableFuture<Void> loadFromSharedPreferences() {
