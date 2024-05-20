@@ -54,6 +54,7 @@ import paeqw.app.models.PlantIdentificationResponse;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.Retrofit;
 
 public class ScanPlantFragment extends Fragment {
     private static final int REQUEST_IMAGE_CAPTURE = 1;
@@ -213,7 +214,10 @@ public class ScanPlantFragment extends Fragment {
             RequestBody requestFile = RequestBody.create(MediaType.parse("image/jpeg"), imageBytes);
             MultipartBody.Part body = MultipartBody.Part.createFormData("images", "image.jpg", requestFile);
 
-            PlantIdentificationService service = RetrofitClient.getClient("https://plant.id").create(PlantIdentificationService.class);
+            RetrofitClient retrofitClient = new RetrofitClient();
+            Retrofit retrofit = retrofitClient.getClient("https://plant.id");
+
+            PlantIdentificationService service = retrofit.create(PlantIdentificationService.class);
             Call<ResponseBody> call = service.identifyPlant(API_KEY, body);
             call.enqueue(new Callback<ResponseBody>() {
                 @Override

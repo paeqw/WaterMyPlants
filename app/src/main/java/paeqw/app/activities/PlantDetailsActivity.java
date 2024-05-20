@@ -64,8 +64,9 @@ public class PlantDetailsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_plant_details);
+        RetrofitClient retrofitClient = new RetrofitClient();
+        Retrofit retrofit = retrofitClient.getClient("https://perenual.com/");
 
-        Retrofit retrofit = RetrofitClient.getClient("https://perenual.com/");
         apiService = retrofit.create(PlantApiService.class);
 
         spaceManager = new SpaceManager(this);
