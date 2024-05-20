@@ -74,7 +74,8 @@ public class SearchPlantFragment extends Fragment {
         searchField = view.findViewById(R.id.searchField);
         progressBar = view.findViewById(R.id.progressBar);  // Initialize ProgressBar
 
-        Retrofit retrofit = RetrofitClient.getClient("https://perenual.com/");
+        RetrofitClient retrofitClient = new RetrofitClient();
+        Retrofit retrofit = retrofitClient.getClient("https://perenual.com/");
         apiService = retrofit.create(PlantApiService.class);
 
         // Load default list initially
