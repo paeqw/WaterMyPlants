@@ -1,10 +1,11 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:id="@+id/linearLayout"
         android:padding="16dp"
         android:background="@drawable/rounded_square"
         android:backgroundTint="@color/darkerGray">
@@ -12,7 +13,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Add Plant to Space"
+            android:text="@string/add_plant_to_space"
+            android:textStyle="bold"
             android:textSize="20sp"
             android:layout_gravity="center"
             android:textColor="@color/white"
@@ -21,11 +23,12 @@
         <EditText
             android:id="@+id/plantNameEditText"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Plant Name"
-            android:textColorHint="@color/white"
+            android:layout_height="50dp"
+            android:inputType="text"
+            android:hint="@string/plant_name"
+            android:textColorHint="@color/lightslategray"
             android:textColor="@color/white"
-            android:textSize="16sp"
+            android:textSize="18sp"
             android:layout_marginTop="10dp"
             />
 
@@ -39,8 +42,9 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Watering interval"
+            android:text="@string/watering_interval"
             android:layout_gravity="center"
+            android:textStyle="bold"
             android:textColor="@color/white"
             android:textSize="20sp"
             android:layout_marginTop="10dp"/>
@@ -48,9 +52,9 @@
         <EditText
             android:id="@+id/intervalEditText"
             android:layout_width="match_parent"
-            android:hint="Enter watering interval"
-            android:textColorHint="@color/white"
-            android:layout_height="wrap_content"
+            android:hint="@string/enter_watering_interval"
+            android:textColorHint="@color/lightslategray"
+            android:layout_height="50dp"
             android:inputType="number"
             android:layout_marginTop="5dp"
             />
@@ -63,6 +67,14 @@
             android:layout_gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Add to Space"/>
+            android:text="@string/add_to_space"/>
     </LinearLayout>
-</LinearLayout>
+
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        android:id="@+id/progressBar"
+        />
+</RelativeLayout>

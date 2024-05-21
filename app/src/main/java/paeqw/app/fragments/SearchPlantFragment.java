@@ -72,13 +72,12 @@ public class SearchPlantFragment extends Fragment {
 
         linearLayout = view.findViewById(R.id.linearLayout);
         searchField = view.findViewById(R.id.searchField);
-        progressBar = view.findViewById(R.id.progressBar);  // Initialize ProgressBar
+        progressBar = view.findViewById(R.id.progressBar);
 
-        RetrofitClient retrofitClient = new RetrofitClient();
-        Retrofit retrofit = retrofitClient.getClient("https://perenual.com/");
-        apiService = retrofit.create(PlantApiService.class);
+        RetrofitClient retrofitClient = new RetrofitClient("https://perenual.com/");
 
-        // Load default list initially
+        apiService = retrofitClient.getRetrofit().create(PlantApiService.class);
+
         searchPlants("");
 
         searchField.setOnEditorActionListener((v, actionId, event) -> {
@@ -100,10 +99,8 @@ public class SearchPlantFragment extends Fragment {
         Call<PlantResponse> call;
 
         if (query.isEmpty()) {
-            // Make the default API call if query is empty
             call = apiService.getPlants(API_KEY);
         } else {
-            // Make the API call with the query
             call = apiService.getPlants(API_KEY, query);
         }
 

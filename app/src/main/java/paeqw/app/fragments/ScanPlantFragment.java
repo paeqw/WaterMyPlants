@@ -20,6 +20,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -107,12 +108,8 @@ public class ScanPlantFragment extends Fragment {
                     PlantIdentificationResponse response = gson.fromJson(responseString, PlantIdentificationResponse.class);
                     PlantIdentificationResponse.Suggestion suggestion = response.result.classification.suggestions.get(0);
 
-                    // Create a new Plant object
                     String plantName = suggestion.name;
-                    double probability = suggestion.probability * 100;
-                    String plantInfo = String.format("%s - probability %.1f%%", plantName, probability);
 
-                    // Show the dialog to add the plant to a space
                     showAddPlantDialog(plantName, photoUri);
                 } else {
                     Toast.makeText(getContext(), "No plant identification result available", Toast.LENGTH_SHORT).show();
@@ -177,7 +174,6 @@ public class ScanPlantFragment extends Fragment {
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
-            // Create a content resolver Uri for saving the image
             ContentResolver resolver = getActivity().getContentResolver();
             ContentValues contentValues = new ContentValues();
             contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, "IMG_" + System.currentTimeMillis() + ".jpg");
@@ -197,8 +193,6 @@ public class ScanPlantFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == getActivity().RESULT_OK) {
-            // The image is saved at the path specified by `photoUri`
-            // You can display it in an ImageView or process it further
             imageView.setImageURI(photoUri);
         }
     }
@@ -214,10 +208,9 @@ public class ScanPlantFragment extends Fragment {
             RequestBody requestFile = RequestBody.create(MediaType.parse("image/jpeg"), imageBytes);
             MultipartBody.Part body = MultipartBody.Part.createFormData("images", "image.jpg", requestFile);
 
-            RetrofitClient retrofitClient = new RetrofitClient();
-            Retrofit retrofit = retrofitClient.getClient("https://plant.id");
+            RetrofitClient retrofitClient = new RetrofitClient("https://plant.id");
+            PlantIdentificationService service = retrofitClient.getRetrofit().create(PlantIdentificationService.class);
 
-            PlantIdentificationService service = retrofit.create(PlantIdentificationService.class);
             Call<ResponseBody> call = service.identifyPlant(API_KEY, body);
             call.enqueue(new Callback<ResponseBody>() {
                 @Override
@@ -256,7 +249,8 @@ public class ScanPlantFragment extends Fragment {
         PlantIdentificationResponse.Suggestion suggestion = response.result.classification.suggestions.get(0);
         String name = suggestion.name;
         double probability = suggestion.probability * 100;
-        resultText.append(String.format("%s - probability %.1f%%\n", name, probability));
+        resultText.append(String.format("%s - probability %.1f%%\n", name, probability)+ "\n");
+        resultText.append("Not this plant? Add one by searching in search tab!");
 
         resultTextView.setText(resultText.toString());
         addPlant.setClickable(true);
@@ -276,13 +270,13 @@ public class ScanPlantFragment extends Fragment {
         EditText plantNameEditText = dialog.findViewById(R.id.plantNameEditText);
         EditText intervalEditText = dialog.findViewById(R.id.intervalEditText);
         Button button = dialog.findViewById(R.id.buttonSubmit);
+        LinearLayout linearLayout = dialog.findViewById(R.id.linearLayout);
+        ProgressBar progressBar1 = dialog.findViewById(R.id.progressBar);
 
         plantNameEditText.setText(plantName);
 
-        // Get the list of spaces
         List<Space> spaceList = spaceManager.getSpaceList();
 
-        // Set up the spinner with spaceList
         ArrayAdapter<Space> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, spaceList);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
@@ -292,18 +286,30 @@ public class ScanPlantFragment extends Fragment {
             String interval = intervalEditText.getText().toString();
             String updatedPlantName = plantNameEditText.getText().toString();
 
-            if (selectedSpace != null && !interval.isEmpty() && !updatedPlantName.isEmpty()) {
-                int inter = Integer.parseInt(interval);
-                // Upload the plant image to Firebase
+            if (selectedSpace != null && !updatedPlantName.isEmpty()) {
+                int inter;
+
+                if (interval.isEmpty()) inter = 7;
+                else inter = Integer.parseInt(interval);
+
+                progressBar1.setVisibility(View.VISIBLE);
                 databaseHelper.uploadPlantImage(photoUri, "userId", selectedSpace.getSpaceName(), updatedPlantName)
-                        .thenAccept(downloadUri -> {
+                        .thenCompose(downloadUri -> {
                             Plant plant = new Plant(updatedPlantName, null, downloadUri.toString(), inter);
                             selectedSpace.addPlant(plant);
-                            spaceManager.saveToSharedPreferences();
-                            dialog.dismiss();
+                            return spaceManager.saveToSharedPreferences();
                         })
+                        .thenRun(() -> getActivity().runOnUiThread(() -> {
+                            progressBar1.setVisibility(View.GONE);
+                            Toast.makeText(getContext(), "Added plant", Toast.LENGTH_LONG).show();
+                            dialog.dismiss();
+                        }))
                         .exceptionally(throwable -> {
-                            Toast.makeText(getContext(), "Failed to upload image: " + throwable.getMessage(), Toast.LENGTH_SHORT).show();
+                            getActivity().runOnUiThread(() -> {
+                                progressBar1.setVisibility(View.GONE);
+                                Toast.makeText(getContext(), "Failed to upload image: " + throwable.getMessage(), Toast.LENGTH_SHORT).show();
+                            });
+                            Log.e("ScanPlantFragment", throwable.toString());
                             return null;
                         });
             } else {
@@ -313,4 +319,6 @@ public class ScanPlantFragment extends Fragment {
 
         dialog.show();
     }
+
+
 }

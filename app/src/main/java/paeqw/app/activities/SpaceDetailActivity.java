@@ -18,18 +18,26 @@ import android.widget.FrameLayout;
 import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.datepicker.MaterialDatePicker;
+import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
 import java.lang.reflect.Type;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.TimeZone;
 
 import paeqw.app.R;
 import paeqw.app.collections.SpaceManager;
@@ -41,6 +49,8 @@ import paeqw.app.models.Space;
 public class SpaceDetailActivity extends AppCompatActivity {
 
     private SpaceManager spaceManager;
+    private LocalDateTime selectedDate;
+
     private String spaceName;
     private Space space;
     private TextView textView;
@@ -165,7 +175,7 @@ public class SpaceDetailActivity extends AppCompatActivity {
         TextView dateView = new TextView(context);
         String lastWateredText = "Not watered yet";
         if (plant.getWhenLastWatered() != null) {
-            lastWateredText = "Last watered: " + DateTimeFormatter.ofPattern("dd MMM yyyy").format(plant.getWhenLastWatered());
+            lastWateredText = "Last watered: " + DateTimeFormatter.ofPattern("dd MMM yyyy").format(LocalDateTime.ofInstant(Instant.ofEpochMilli(plant.getWhenLastWatered()), ZoneId.systemDefault()));
         }
         dateView.setText(lastWateredText);
         dateView.setTextColor(Color.WHITE);
@@ -187,6 +197,54 @@ public class SpaceDetailActivity extends AppCompatActivity {
         return frameLayout1;
     }
 
+    private void showPlantModifyDialog(Plant plant){
+            Dialog dialog = new Dialog(this);
+            dialog.setContentView(R.layout.change_when_last_watered_dialog);
+
+            Window window = dialog.getWindow();
+            if (window != null) {
+                window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                window.setBackgroundDrawableResource(android.R.color.transparent);
+            }
+
+            TextInputEditText editTextDate = dialog.findViewById(R.id.editTextDate);
+            Button buttonModify = dialog.findViewById(R.id.buttonSubmit);
+
+            MaterialDatePicker<Long> datePicker = MaterialDatePicker.Builder.datePicker()
+                    .setTitleText("Select Date")
+                    .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
+                    .build();
+
+            editTextDate.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    datePicker.show(getSupportFragmentManager(), "MATERIAL_DATE_PICKER");
+                }
+            });
+            datePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener<Long>() {
+                @Override
+                public void onPositiveButtonClick(Long selection) {
+                    editTextDate.setText(datePicker.getHeaderText());
+
+                    selectedDate = LocalDateTime.ofInstant(Instant.ofEpochMilli(selection),
+                            TimeZone.getDefault().toZoneId());
+                }
+            });
+
+            buttonModify.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (selectedDate != null) {
+                        plant.setWhenLastWatered(selectedDate.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
+                        spaceManager.saveToSharedPreferences();
+                        dialog.dismiss();
+                        showPlants();
+                    } else Toast.makeText(SpaceDetailActivity.this, "Please select date!", Toast.LENGTH_LONG).show();
+                }
+            });
+
+            dialog.show();
+        }
     private void showPlantDialog(Plant plant) {
         Dialog dialog = new Dialog(this);
         dialog.setContentView(R.layout.plant_costam_dialog);
@@ -205,7 +263,7 @@ public class SpaceDetailActivity extends AppCompatActivity {
         buttonModify.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO: Add logic for modifying the plant
+                showPlantModifyDialog(plant);
                 dialog.dismiss();
             }
         });
@@ -232,7 +290,6 @@ public class SpaceDetailActivity extends AppCompatActivity {
             }
         });
 
-        // Show the dialog
         dialog.show();
     }
 

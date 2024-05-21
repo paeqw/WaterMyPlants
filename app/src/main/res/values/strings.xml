@@ -73,5 +73,17 @@
     <string name="add_to_space">Add to space</string>
     <string name="delete_plant_button">Delete plant</string>
     <string name="change_when_last_watered_button">Change when last watered</string>
+    <string name="watering_interval">Watering interval</string>
+    <string name="enter_watering_interval">Enter watering interval</string>
+    <string name="add_plant_to_space">Add Plant to Space</string>
+    <string name="plant_name">Plant Name</string>
+    <string name="identify_plant">Identify Plant</string>
+    <string name="captured_photo_will_appear_here">Captured photo will appear here</string>
+    <string name="add_plant">Add plant</string>
+    <string name="take_photo">Take Photo</string>
+    <string name="scan_plant">Scan Plant</string>
+    <string name="change_when_last_watered">Change when last watered</string>
+    <string name="change">Change</string>
+    <string name="select_date">Select a date</string>
 
 </resources>
