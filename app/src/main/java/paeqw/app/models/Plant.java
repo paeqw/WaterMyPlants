@@ -1,10 +1,13 @@
 package paeqw.app.models;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+
 
 public class Plant {
     private String name;
-    private LocalDateTime whenLastWatered;
+    private Long whenLastWatered;
     private String imageUrl;
     private int wateringInterval;
 
@@ -22,13 +25,19 @@ public class Plant {
 
     public Plant(String name, LocalDateTime whenLastWatered, String imageUrl) {
         this.name = name;
-        this.whenLastWatered = whenLastWatered;
+        this.whenLastWatered = whenLastWatered.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();;
         this.imageUrl = imageUrl;
     }
 
     public Plant(String name, LocalDateTime whenLastWatered, String imageUrl, int wateringInterval) {
         this.name = name;
-        this.whenLastWatered = whenLastWatered;
+        this.whenLastWatered = whenLastWatered.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();;
+        this.imageUrl = imageUrl;
+        this.wateringInterval = wateringInterval;
+    }
+
+    public Plant(String name, String imageUrl, int wateringInterval) {
+        this.name = name;
         this.imageUrl = imageUrl;
         this.wateringInterval = wateringInterval;
     }
@@ -37,11 +46,11 @@ public class Plant {
         return name;
     }
 
-    public LocalDateTime getWhenLastWatered() {
+    public Long getWhenLastWatered() {
         return whenLastWatered;
     }
 
-    public void setWhenLastWatered(LocalDateTime whenLastWatered) {
+    public void setWhenLastWatered(long whenLastWatered) {
         this.whenLastWatered = whenLastWatered;
     }
 

@@ -64,10 +64,8 @@ public class PlantDetailsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_plant_details);
-        RetrofitClient retrofitClient = new RetrofitClient();
-        Retrofit retrofit = retrofitClient.getClient("https://perenual.com/");
-
-        apiService = retrofit.create(PlantApiService.class);
+        RetrofitClient retrofitClient = new RetrofitClient("https://perenual.com/");
+        apiService = retrofitClient.getRetrofit().create(PlantApiService.class);
 
         spaceManager = new SpaceManager(this);
         spaceManager.loadFromDatabase().thenRun(() -> {
@@ -120,7 +118,7 @@ public class PlantDetailsActivity extends AppCompatActivity {
 
         button.setOnClickListener(view -> {
             Space selectedSpace = (Space) spinner.getSelectedItem();
-            selectedSpace.addPlant(new Plant(plant.getCommonName(), null,plant.getDefaultImage().getMediumUrl(),plant.getWateringGeneralBenchmark().getWhenWater()));
+            selectedSpace.addPlant(new Plant(plant.getCommonName(),plant.getDefaultImage().getMediumUrl(),plant.getWateringGeneralBenchmark().getWhenWater()));
             spaceManager.saveToSharedPreferences();
             dialog.dismiss();
         });

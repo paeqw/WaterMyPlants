@@ -126,7 +126,8 @@ public class PlantsListFragment extends Fragment {
 
         button.setOnClickListener(view -> {
             String inputText = editText.getText().toString();
-            spaceManager.addSpace(new Space(inputText));
+            if (inputText.isEmpty()) spaceManager.addSpace(new Space("Space"));
+            else spaceManager.addSpace(new Space(inputText));
             saveViews();
             showViews();
             dialog.dismiss();

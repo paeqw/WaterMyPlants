@@ -41,17 +41,24 @@ public class SpaceManager implements Serializable {
 
     public CompletableFuture<Void> saveToSharedPreferences() {
         return CompletableFuture.runAsync(() -> {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user != null) {
-            String userId = user.getUid();
-            for (Space el : spaceList) {
-                databaseHelper.addSpaceToDatabase(el, userId);
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            if (user != null) {
+                String userId = user.getUid();
+                List<CompletableFuture<Void>> futures = new ArrayList<>();
+                for (Space el : spaceList) {
+                    futures.add(databaseHelper.addSpaceToDatabase(el, userId));
+                }
+
+                // Wait for all database operations to complete
+                CompletableFuture<Void> allOf = CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]));
+                allOf.join();  // Block until all futures are complete
             }
-        }
-        SharedPreferencesHelper sharedPreferencesHelper = new SharedPreferencesHelper(context);
-        sharedPreferencesHelper.saveSpaces(spaceList);
+
+            SharedPreferencesHelper sharedPreferencesHelper = new SharedPreferencesHelper(context);
+            sharedPreferencesHelper.saveSpaces(spaceList);
         });
     }
+
 
     public CompletableFuture<Void> loadFromSharedPreferences() {
         return CompletableFuture.runAsync(() -> {
