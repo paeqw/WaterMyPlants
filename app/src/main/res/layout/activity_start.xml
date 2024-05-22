@@ -1,16 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.StartActivity">
+    tools:context=".activities.StartActivity"
+    android:background="@color/darkerGray">
 
-    <Button
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:text="goto login"
+        android:text="@string/water_my_plants"
+        android:textColor="@color/white"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:textSize="40sp"
+        />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/main"
+        android:scaleType="centerInside"
+        android:layout_marginBottom="40dp"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/welcome_to_my_app_water_my_plants_that_let_s_you_manage_your_plants_tells_you_when_you_have_to_water_them"
+        android:textColor="@color/white"
+        android:textSize="22sp"
+        android:padding="20dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="80dp"
+        android:textAlignment="center"
+        />
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dp"
+        android:paddingVertical="10dp"
+        android:layout_marginHorizontal="10dp"
+        style="?attr/buttonBarStyle"
+        android:backgroundTint="@color/lightSeaGreen"
+        android:text="@string/go_to_main_page"
         android:textSize="20sp"
         android:id="@+id/btn"
         />

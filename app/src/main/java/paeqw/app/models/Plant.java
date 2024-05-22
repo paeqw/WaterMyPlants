@@ -3,13 +3,13 @@ package paeqw.app.models;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-
+import java.time.temporal.ChronoUnit;
 
 public class Plant {
     private String name;
     private Long whenLastWatered;
     private String imageUrl;
-    private int wateringInterval;
+    private int wateringInterval; // in days
 
     public Plant() {
     }
@@ -25,13 +25,13 @@ public class Plant {
 
     public Plant(String name, LocalDateTime whenLastWatered, String imageUrl) {
         this.name = name;
-        this.whenLastWatered = whenLastWatered.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();;
+        this.whenLastWatered = whenLastWatered.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
         this.imageUrl = imageUrl;
     }
 
     public Plant(String name, LocalDateTime whenLastWatered, String imageUrl, int wateringInterval) {
         this.name = name;
-        this.whenLastWatered = whenLastWatered.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();;
+        this.whenLastWatered = whenLastWatered.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
         this.imageUrl = imageUrl;
         this.wateringInterval = wateringInterval;
     }
@@ -72,5 +72,15 @@ public class Plant {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public boolean needsWater() {
+        if (whenLastWatered == null || wateringInterval <= 0) {
+            return false;
+        }
+        LocalDateTime lastWateredDate = Instant.ofEpochMilli(whenLastWatered).atZone(ZoneId.systemDefault()).toLocalDateTime();
+        LocalDateTime now = LocalDateTime.now();
+        long daysSinceLastWatered = ChronoUnit.DAYS.between(lastWateredDate, now);
+        return daysSinceLastWatered >= wateringInterval;
     }
 }

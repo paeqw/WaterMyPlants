@@ -1,25 +1,24 @@
 package paeqw.app.activities;
 
+
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.os.Build;
+import android.os.Bundle;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-
-import android.content.Intent;
-import android.os.Bundle;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import paeqw.app.R;
-import paeqw.app.collections.SpaceManager;
 import paeqw.app.fragments.BlogFragment;
 import paeqw.app.fragments.MoreFragment;
 import paeqw.app.fragments.PlantsListFragment;
 import paeqw.app.fragments.ScanPlantFragment;
 import paeqw.app.fragments.SearchPlantFragment;
 
-import androidx.lifecycle.ViewModelProvider;
-
 public class MainActivity extends AppCompatActivity {
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
