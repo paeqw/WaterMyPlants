@@ -1,14 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="16dp">
-
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/logintext"
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/white"
+        android:id="@+id/first"
+        android:background="@color/darkerGray"
+        android:gravity="center"
+        android:textSize="20sp"
+        android:padding="20dp"
+        />
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_below="@id/first"
+    android:padding="16dp"
+    android:background="@color/lighterGray"
+
+    >
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/login_with_emain_and_password"
+        android:id="@+id/firstt"
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/white"
+        android:gravity="center"
+        android:textSize="20sp"
+        />
+    <TextView
+        android:layout_below="@id/firstt"
         android:id="@+id/textViewEmailLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/emailtext"
+        android:textColor="@color/white"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:layout_marginTop="16dp"/>
 
@@ -19,6 +50,7 @@
         android:autofillHints="emailAddress"
         android:layout_below="@id/textViewEmailLabel"
         android:layout_marginTop="8dp"
+        android:textColor="@color/white"
         android:hint="@string/emailhint"
         android:inputType="textEmailAddress"/>
 
@@ -27,6 +59,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/passwordtext"
+        android:textColor="@color/white"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:layout_below="@id/editTextEmail"
         android:layout_marginTop="16dp"/>
@@ -38,31 +71,64 @@
         android:layout_below="@id/textViewPasswordLabel"
         android:layout_marginTop="8dp"
         android:autofillHints="password"
+        android:textColor="@color/white"
         android:hint="@string/enter_your_password"
         android:inputType="textPassword"/>
 
     <Button
         android:id="@+id/buttonLogin"
+        style="?attr/buttonBarStyle"
+        android:backgroundTint="@color/lightSeaGreen"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/editTextPassword"
         android:layout_marginTop="16dp"
+        android:textSize="18sp"
         android:text="@string/button_login"/>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/you_don_t_have_an_account"
+        android:layout_below="@id/buttonLogin"
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:layout_marginTop="10dp"
+        android:id="@+id/cos"
+        />
     <Button
         android:id="@+id/buttonRegister"
+        style="?attr/buttonBarStyle"
+        android:backgroundTint="@color/lightSeaGreen"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/buttonLogin"
+        android:layout_below="@id/cos"
         android:layout_marginTop="8dp"
+        android:textSize="18sp"
         android:text="@string/button_register"/>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/or_login_with"
+        android:layout_below="@id/buttonRegister"
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:layout_marginTop="10dp"
+        android:id="@+id/witam"
+        />
     <Button
         android:id="@+id/buttonLoginGoogle"
-        android:layout_width="match_parent"
+        style="?attr/materialIconButtonFilledStyle"
+        android:backgroundTint="@color/lightSeaGreen"
+        android:layout_centerHorizontal="true"
+        app:icon="@drawable/google__g__logo"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/buttonRegister"
+        android:layout_below="@id/witam"
         android:layout_marginTop="8dp"
-        android:text="@string/button_login_with_google"/>
-
+   />
+    </RelativeLayout>
 </RelativeLayout>

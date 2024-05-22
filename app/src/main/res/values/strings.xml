@@ -47,7 +47,7 @@
     <string name="menu_icon_more">More</string>
     <string name="menu_icon_scan">Scan</string>
     <string name="spaces">Spaces</string>
-    <string name="logout">logout</string>
+    <string name="logout">Logout</string>
     <string name="add_space_button">Add space</string>
     <string name="enter_space_name">Enter space name</string>
     <string name="space_name">Space name</string>
@@ -57,7 +57,6 @@
     <string name="change_name_button">Change name</string>
     <string name="more">More</string>
     <string name="profile_image_description">profile image</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="add_new_plant_button">Add new plant</string>
     <string name="add_plant_by_searching_button">Add plant by searching</string>
@@ -85,5 +84,15 @@
     <string name="change_when_last_watered">Change when last watered</string>
     <string name="change">Change</string>
     <string name="select_date">Select a date</string>
+    <string name="welcome_to_my_app_water_my_plants_that_let_s_you_manage_your_plants_tells_you_when_you_have_to_water_them">Welcome to my app, water my plants, that let\'s you manage your plants and tells you when you have to water them!</string>
+    <string name="water_my_plants">Water My Plants</string>
+    <string name="go_to_main_page">Go to main page!</string>
+    <string name="or_login_with">Or login with:</string>
+    <string name="you_don_t_have_an_account">You don\'t have an account?</string>
+    <string name="login_with_emain_and_password">Login with emain and password:</string>
+    <string name="allow_notifications">Allow notifications</string>
+    <string name="credits_remaining">Credits for identification remaining:</string>
+    <string name="plants_added">Plants added:</string>
+    <string name="blog">Blog</string>
 
 </resources>

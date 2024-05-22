@@ -16,6 +16,8 @@ import com.google.firebase.storage.StorageReference;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+
+import paeqw.app.models.BlogPost;
 import paeqw.app.models.Plant;
 import paeqw.app.models.Space;
 
@@ -122,6 +124,48 @@ public class DatabaseHelper {
 
             return future;
         });
+    }
+
+    public CompletableFuture<List<BlogPost>> fetchBlogPosts() {
+        DatabaseReference blogRef = database.getReference("blogs");
+        CompletableFuture<List<BlogPost>> future = new CompletableFuture<>();
+
+        blogRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                List<BlogPost> blogPosts = new ArrayList<>();
+                for (DataSnapshot blogSnapshot : dataSnapshot.getChildren()) {
+                    BlogPost blogPost = blogSnapshot.getValue(BlogPost.class);
+                    if (blogPost != null) {
+                        blogPosts.add(blogPost);
+                    }
+                }
+                future.complete(blogPosts);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.e("Database", "Error loading blog posts", databaseError.toException());
+                future.completeExceptionally(databaseError.toException());
+            }
+        });
+
+        return future;
+    }
+
+    public CompletableFuture<Void> addBlogPost(BlogPost blogPost) {
+        DatabaseReference blogRef = database.getReference("blogs").push();
+        CompletableFuture<Void> future = new CompletableFuture<>();
+
+        blogRef.setValue(blogPost).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                future.complete(null);
+            } else {
+                future.completeExceptionally(task.getException());
+            }
+        });
+
+        return future;
     }
 
     public CompletableFuture<List<Space>> fetchSpaces(String userId) {

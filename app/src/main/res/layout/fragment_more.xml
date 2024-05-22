@@ -1,11 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragments.MoreFragment"
     android:background="@color/lighterGray">
+
     <RelativeLayout
         android:id="@+id/relative1"
         android:layout_width="match_parent"
@@ -20,43 +19,92 @@
             android:textColor="@color/white"
             android:textSize="20sp"
             android:paddingVertical="10dp"
-            android:layout_centerInParent="true"
-            />
-
-
-
+            android:layout_centerInParent="true" />
     </RelativeLayout>
-
-
-
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/relative1"
+        android:textColor="@color/white"
         android:textSize="20sp"
         android:id="@+id/textViewUsernameLabel"
-        android:layout_centerHorizontal="true"/>
+        android:layout_centerHorizontal="true" />
+
     <ImageView
         android:layout_below="@id/textViewUsernameLabel"
         android:layout_centerHorizontal="true"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="180dp"
+        android:layout_height="180dp"
         android:layout_marginTop="10dp"
         android:id="@+id/rounded_image_view"
-
         android:contentDescription="@string/profile_image_description"
         android:scaleType="centerCrop"
-        android:background="@drawable/rounded_square"
-        />
+        android:background="@drawable/rounded_square" />
 
-    <com.google.android.material.button.MaterialButton
-        android:layout_width="wrap_content"
+    <View
+        android:layout_width="match_parent"
+        android:layout_below="@id/rounded_image_view"
+        android:paddingHorizontal="5dp"
+        android:layout_marginTop="9dp"
+        android:layout_height="1dp"
+        android:background="@color/white" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_marginTop="20dp"
         android:layout_height="wrap_content"
-        android:text="@string/logout"
-        android:layout_centerInParent="true"
-        android:id="@+id/button"
-        />
+        android:layout_below="@id/rounded_image_view">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:textColor="@color/white"
+                android:id="@+id/plant_count"
+                android:text="@string/plants_added"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="20dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:textColor="@color/white"
+                android:id="@+id/credits_remaining"
+                android:text="@string/credits_remaining"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="20dp" />
+
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:layout_width="match_parent"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="20dp"
+                style="?attr/buttonBarStyle"
+                android:backgroundTint="@color/lightSeaGreen"
+                android:textSize="18sp"
+                android:textColor="@color/white"
+                android:layout_height="wrap_content"
+                android:text="@string/allow_notifications"
+                android:id="@+id/button" />
+
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="match_parent"
+                android:paddingHorizontal="10dp"
+                android:layout_marginHorizontal="5dp"
+                android:paddingVertical="20dp"
+                style="?attr/buttonBarStyle"
+                android:backgroundTint="@color/lightSeaGreen"
+                android:textSize="18sp"
+                android:layout_height="wrap_content"
+                android:text="@string/logout"
+                android:id="@+id/buttonLogout" />
+        </LinearLayout>
+    </ScrollView>
 </RelativeLayout>
+
