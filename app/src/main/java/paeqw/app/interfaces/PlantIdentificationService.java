@@ -19,6 +19,6 @@ public interface PlantIdentificationService {
             @Part MultipartBody.Part image
     );
 
-    @GET("/api/v3/classes_info")
+    @GET("/api/v3/usage_info")
     Call<UsageInfoResponse> getUsageInfo(@Header("Api-Key") String apiKey);
 }

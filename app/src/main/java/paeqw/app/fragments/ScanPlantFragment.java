@@ -37,6 +37,7 @@ import com.google.gson.Gson;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
@@ -295,7 +296,8 @@ public class ScanPlantFragment extends Fragment {
                 progressBar1.setVisibility(View.VISIBLE);
                 databaseHelper.uploadPlantImage(photoUri, "userId", selectedSpace.getSpaceName(), updatedPlantName)
                         .thenCompose(downloadUri -> {
-                            Plant plant = new Plant(updatedPlantName, null, downloadUri.toString(), inter);
+                            LocalDateTime now = LocalDateTime.now();
+                            Plant plant = new Plant(updatedPlantName, now, downloadUri.toString(), inter);
                             selectedSpace.addPlant(plant);
                             return spaceManager.saveToSharedPreferences();
                         })
