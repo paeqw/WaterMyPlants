@@ -81,17 +81,6 @@
                 android:paddingHorizontal="10dp"
                 android:paddingVertical="20dp" />
 
-            <com.google.android.material.switchmaterial.SwitchMaterial
-                android:layout_width="match_parent"
-                android:paddingHorizontal="10dp"
-                android:paddingVertical="20dp"
-                style="?attr/buttonBarStyle"
-                android:backgroundTint="@color/lightSeaGreen"
-                android:textSize="18sp"
-                android:textColor="@color/white"
-                android:layout_height="wrap_content"
-                android:text="@string/allow_notifications"
-                android:id="@+id/button" />
 
             <com.google.android.material.button.MaterialButton
                 android:layout_width="match_parent"

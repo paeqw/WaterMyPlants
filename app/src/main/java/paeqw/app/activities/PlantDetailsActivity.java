@@ -16,6 +16,8 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -58,6 +60,8 @@ public class PlantDetailsActivity extends AppCompatActivity {
     private PlantApiService apiService;
     private SpaceManager spaceManager;
     private PlantApi plant;
+    private ProgressBar progressBar;
+    private ScrollView scrollView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +80,7 @@ public class PlantDetailsActivity extends AppCompatActivity {
             int plantId = intent.getIntExtra("plant_id", -1);
 
             if (plantId != -1) {
+                showLoader();
                 fetchPlantDetails(plantId);
                 fetchCareGuides(plantId);
             }
@@ -93,10 +98,14 @@ public class PlantDetailsActivity extends AppCompatActivity {
         horizontalSquares = findViewById(R.id.horizontalSquares);
         smallBottomImage = findViewById(R.id.smalBottom);
         buttonAddToSpace = findViewById(R.id.buttonAddToSpace);
+        progressBar = findViewById(R.id.progressBar);
+        scrollView = findViewById(R.id.scrollView);
     }
+
     private void initListeners() {
         buttonAddToSpace.setOnClickListener(view -> clickedButtonAddToSpace());
     }
+
     private void clickedButtonAddToSpace() {
         Dialog dialog = new Dialog(this);
         dialog.setContentView(R.layout.add_to_space_dialog);
@@ -136,11 +145,13 @@ public class PlantDetailsActivity extends AppCompatActivity {
                 } else {
                     Log.e(TAG, "Response unsuccessful or body is null");
                 }
+                hideLoader();
             }
 
             @Override
             public void onFailure(Call<PlantApi> call, Throwable t) {
                 Log.e(TAG, "API call failed", t);
+                hideLoader();
             }
         });
     }
@@ -163,8 +174,8 @@ public class PlantDetailsActivity extends AppCompatActivity {
         }
 
         if (plant.getWateringGeneralBenchmark() != null) {
-            addTextViewIfNotEmpty("Watering Benchmark: ", plant.getWateringGeneralBenchmark().getValue() + " " +
-                    plant.getWateringGeneralBenchmark().getUnit());
+            addFrameWithText("Watering Benchmark: ", plant.getWateringGeneralBenchmark().getValue() + " " +
+                    plant.getWateringGeneralBenchmark().getUnit(), R.drawable.water_drop_24px);
         }
 
         addFrameWithText("Volume Water Requirement: ", TextUtils.join(", ", plant.getVolumeWaterRequirement()), R.drawable.water_drop_24px);
@@ -266,11 +277,13 @@ public class PlantDetailsActivity extends AppCompatActivity {
                 } else {
                     Log.e(TAG, "Care Guide Response unsuccessful or body is null");
                 }
+                hideLoader();
             }
 
             @Override
             public void onFailure(Call<CareGuideApi> call, Throwable t) {
                 Log.e(TAG, "Care Guide API call failed", t);
+                hideLoader();
             }
         });
     }
@@ -322,5 +335,15 @@ public class PlantDetailsActivity extends AppCompatActivity {
 
     private void rotateIcon(ImageView icon, float fromDegrees, float toDegrees) {
         icon.animate().rotation(toDegrees).setDuration(300).start();
+    }
+
+    private void showLoader() {
+        progressBar.setVisibility(View.VISIBLE);
+        scrollView.setVisibility(View.GONE);
+    }
+
+    private void hideLoader() {
+        progressBar.setVisibility(View.GONE);
+        scrollView.setVisibility(View.VISIBLE);
     }
 }

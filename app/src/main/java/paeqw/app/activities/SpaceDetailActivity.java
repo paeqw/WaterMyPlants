@@ -211,8 +211,9 @@ public class SpaceDetailActivity extends AppCompatActivity {
         FrameLayout.LayoutParams intervalParams = new FrameLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT,
-                Gravity.CENTER
+                Gravity.BOTTOM
         );
+        intervalParams.bottomMargin = 140;
         intervalView.setLayoutParams(intervalParams);
         frameLayout.addView(intervalView);
 
@@ -340,6 +341,9 @@ public class SpaceDetailActivity extends AppCompatActivity {
 
         int pendingIntentFlag = PendingIntent.FLAG_UPDATE_CURRENT;
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            pendingIntentFlag |= PendingIntent.FLAG_IMMUTABLE;
+        }
 
         PendingIntent pendingIntent = PendingIntent.getService(this, 0, intent, pendingIntentFlag);
 
@@ -347,6 +351,7 @@ public class SpaceDetailActivity extends AppCompatActivity {
 
         alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + interval, interval, pendingIntent);
     }
+
 
     private void showAddPlantDialog() {
         Dialog dialog = new Dialog(this);
